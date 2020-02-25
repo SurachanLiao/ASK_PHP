@@ -15,6 +15,7 @@ const useStyles = createUseStyles({
   }
 });
 
+// The main function of the app
 const App = () => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.CREATING);
   const classes = useStyles();
@@ -34,7 +35,7 @@ const App = () => {
   return (
     <div>
       <header className={classes.header}>
-        <h1>Card Match Game</h1>
+        <h1>a hand of Poker</h1>
       </header>
       <div>
         <GameBoard
@@ -42,6 +43,7 @@ const App = () => {
           handleStart={setGameToInProgress}
           handleFinish={gameFinished}
         />
+        {/* When game is finished, display a message*/}
         {gameStatus === GAME_STATUS.FINISHED && (
           <Banner handleClick={resetGame} />
         )}
@@ -54,4 +56,5 @@ const App = () => {
   );
 };
 
+// export app for user 
 export default App;

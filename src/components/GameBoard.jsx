@@ -30,14 +30,15 @@ export default props => {
    */
   const checkGameFinished = useCallback(() => {
     const matches = Object.keys(deck).filter(
+      // === is when comparing each variable without convertion 
       key => deck[key].status === CARD_STATUS.MATCHED
     );
-
+      // every pair of card is matched
     if (matches.length === DECK_SIZE - 1) {
       props.handleFinish();
     }
   }, [deck, props]);
-
+ 
   /**
    * Find odd card out and flip it
    */
