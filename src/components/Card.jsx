@@ -75,4 +75,20 @@ const Card = ({ data, handleClick, index }) => {
   );
 };
 
+// const images = [
+//   // { id: 1, src: "../assets/resized/2C.jpg", title: 'foo', description: 'bar' }
+//   { id: 1, src: "../assets/resized/2C.jpg", title: 'foo', description: 'bar' },
+//   { id: 2, src: "../assets/resized/2D.jpg", title: 'foo', description: 'bar' },
+//   { id: 3, src: "../assets/resized/2H.jpg", title: 'foo', description: 'bar' },
+//   { id: 4, src: "../assets/resized/2S.jpg", title: 'foo', description: 'bar' },
+//   { id: 5, src: "../assets/resized/3C.jpg", title: 'foo', description: 'bar' },
+//   { id: 6, src: "../assets/resized/3D.jpg", title: 'foo', description: 'bar' },
+//   { id: 7, src: "../assets/resized/3H.jpg", title: 'foo', description: 'bar' },
+//   { id: 8, src: "../assets/resized/3S.jpg", title: 'foo', description: 'bar' },
+//   { id: 9, src: "../assets/resized/4C.jpg", title: 'foo', description: 'bar' },
+//   { id: 10, src: "../assets/resized/4DC.jpg", title: 'foo', description: 'bar' },
+//   { id: 11, src: "../assets/resized/4HC.jpg", title: 'foo', description: 'bar' },
+//   { id: 12, src: "../assets/resized/4SC.jpg", title: 'foo', description: 'bar' },
+// ];
+
 export default Card;

@@ -1,8 +1,16 @@
 import { CARD_STATUS, DECK_SIZE, CARD_SIZES } from "../constants";
 import C2 from "../assets/resized/2C.jpg";
+import C3 from "../assets/resized/3C.jpg";
+import C4 from "../assets/resized/4C.jpg";
+import C5 from "../assets/resized/5C.jpg";
+import C6 from "../assets/resized/6C.jpg";
+import C7 from "../assets/resized/7C.jpg";
+import C8 from "../assets/resized/8C.jpg";
 
 const BASE_URL = "https://picsum.photos";
 const LIMIT = Math.ceil(DECK_SIZE / 2);
+
+{/* <img src={images['doggy.png']} /> */}
 
 /**
  * Create new game
@@ -24,13 +32,15 @@ export default () => {
 export const getRandomUrls = () => {
   // const imageUrl = `${BASE_URL}/${CARD_SIZES.width}/${CARD_SIZES.height}?random=`;
 
-  const imageUrl = C2;
+  const imageUrl = [C2,C3,C4,C5,C6,C7,C8];
+  // const imageUrl = images;
   const urlArray = [];
 
+  // for (let index = 0; index < LIMIT; index++) {
   for (let index = 0; index < LIMIT; index++) {
     urlArray.push({
       id: index,
-      url: imageUrl,
+      url: imageUrl[index],
       // url: imageUrl + index,
       status: CARD_STATUS.HIDDEN
     });
