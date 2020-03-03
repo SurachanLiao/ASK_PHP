@@ -57,7 +57,7 @@ import HQ from "../assets/resized/QH.jpg";
 import HK from "../assets/resized/KH.jpg";
 import HA from "../assets/resized/AH.jpg";
 
-
+// generate a deck of 52 cards
 const cardsData = [
     {
         id: 1,

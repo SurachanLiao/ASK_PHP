@@ -43,7 +43,6 @@ const useStyles = createUseStyles({
 
 const Card = ({ data, handleClick, index }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  //console.log(data)
   const { id, url, status } = data;
   const classes = useStyles();
   const isSelected = status === CARD_STATUS.SELECTED;

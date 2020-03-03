@@ -138,6 +138,25 @@ export default props => {
     }
   }, [count, checkPair]);
 
+  // useEffect(() => {
+  //   const { gameStatus } = props;
+
+  //   // Initialise game
+  //   if (
+  //     gameStatus === GAME_STATUS.CREATING ||
+  //     gameStatus === GAME_STATUS.RESETTING
+  //   ) {
+  //     setIsLoading(true);
+  //     setDeck(GameService());
+  //     setIsLoading(false);
+  //     props.handleStart();
+  //   } else if (gameStatus === GAME_STATUS.IN_PROGRESS) {
+  //     checkGameFinished();
+  //   } else if (gameStatus === GAME_STATUS.FINISHED) {
+  //     flipAllCards();
+  //   }
+  // }, [checkGameFinished, flipAllCards, props]);
+
   useEffect(() => {
     const { gameStatus } = props;
 
@@ -150,10 +169,9 @@ export default props => {
       setDeck(GameService());
       setIsLoading(false);
       props.handleStart();
-    } else if (gameStatus === GAME_STATUS.IN_PROGRESS) {
-      checkGameFinished();
-    } else if (gameStatus === GAME_STATUS.FINISHED) {
+    } else if (gameStatus === GAME_STATUS.IN_PROGRESS){
       flipAllCards();
+      checkGameFinished();
     }
   }, [checkGameFinished, flipAllCards, props]);
 
