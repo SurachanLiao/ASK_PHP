@@ -26,24 +26,25 @@ export default () => {
 // generate randoms cards from a deck of 52 cards
 export const getRandomCards = () => {
 
-  const urlArray = [];
-  var rand = new Array(LIMIT);
+  const imageArray = [];
+  var rand = new Array(DECK_SIZE);
 
-  //////// NEED FIX TO GENERATE UNIQUE RANDOM
-  // random cards from the deck
-  for (let index = 0; index < LIMIT; index++) {
+  // NEED FIX TO GENERATE UNIQUE RANDOM
+  // select random cards from the deck
+  for (let index = 0; index < DECK_SIZE; index++) {
      rand[index] = Math.floor(Math.random() * 52);
   }
 
-  for (let index = 0; index < LIMIT; index++) {
-    urlArray.push({
+  // match random cards from cardsData to the deck in play
+  for (let index = 0; index < DECK_SIZE; index++) {
+    imageArray.push({
       id: index,
       url: cardsData[rand[index]].image,
       status: CARD_STATUS.HIDDEN
     });
   }
 
-  return urlArray;
+  return imageArray;
 };
 
 /**
