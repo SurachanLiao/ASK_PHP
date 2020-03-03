@@ -1,6 +1,5 @@
 export const CARD_SIZES = { width: 150, height: 250 };
-export const DECK_SIZE = 7; // the number of cards on screen
-
+export const DECK_SIZE = 7; 
 
 export const GAME_STATUS = {
   IN_PROGRESS: "IN_PROGRESS",

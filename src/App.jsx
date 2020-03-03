@@ -15,6 +15,7 @@ const useStyles = createUseStyles({
   }
 });
 
+// Attribution: from https://kaz-yamada.github.io/Card-Match-Game
 // The main function of the app
 const App = () => {
   const [gameStatus, setGameStatus] = useState(GAME_STATUS.CREATING);
@@ -35,7 +36,7 @@ const App = () => {
   return (
     <div>
       <header className={classes.header}>
-        <h1>a hand of Poker</h1>
+        <h1>A hand of Poker</h1>
       </header>
       <div>
         <GameBoard
@@ -48,10 +49,6 @@ const App = () => {
           <Banner handleClick={resetGame} />
         )}
       </div>
-      <footer className={classes.footer}>
-        Created by <a href="https://www.kazyamada.com/">Kaz Yamada</a> |{" "}
-        <a href="https://github.com/kaz-yamada/Card-Match-Game">Source</a>
-      </footer>
     </div>
   );
 };
