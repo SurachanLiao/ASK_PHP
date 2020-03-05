@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/ASK_PHP/static/js/main.3c9da29b.chunk.js",
-    "main.js.map": "/ASK_PHP/static/js/main.3c9da29b.chunk.js.map",
+    "main.js": "/ASK_PHP/static/js/main.a1a0fc97.chunk.js",
+    "main.js.map": "/ASK_PHP/static/js/main.a1a0fc97.chunk.js.map",
     "runtime-main.js": "/ASK_PHP/static/js/runtime-main.f78dd8f1.js",
     "runtime-main.js.map": "/ASK_PHP/static/js/runtime-main.f78dd8f1.js.map",
     "static/js/2.d5cf6578.chunk.js": "/ASK_PHP/static/js/2.d5cf6578.chunk.js",
     "static/js/2.d5cf6578.chunk.js.map": "/ASK_PHP/static/js/2.d5cf6578.chunk.js.map",
     "index.html": "/ASK_PHP/index.html",
-    "precache-manifest.ec256464fec48f4d129e9a7a1c659a7c.js": "/ASK_PHP/precache-manifest.ec256464fec48f4d129e9a7a1c659a7c.js",
+    "precache-manifest.fa134a4e752cd6fc94ef26d09b974509.js": "/ASK_PHP/precache-manifest.fa134a4e752cd6fc94ef26d09b974509.js",
     "service-worker.js": "/ASK_PHP/service-worker.js",
     "static/js/2.d5cf6578.chunk.js.LICENSE.txt": "/ASK_PHP/static/js/2.d5cf6578.chunk.js.LICENSE.txt",
     "static/media/10C.jpg": "/ASK_PHP/static/media/10C.9fc91a28.jpg",
@@ -66,6 +66,6 @@
   "entrypoints": [
     "static/js/runtime-main.f78dd8f1.js",
     "static/js/2.d5cf6578.chunk.js",
-    "static/js/main.3c9da29b.chunk.js"
+    "static/js/main.a1a0fc97.chunk.js"
   ]
 }
