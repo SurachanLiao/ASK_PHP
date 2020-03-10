@@ -1,45 +1,30 @@
 {
-  "homepage": "http://SurachanLiao.github.io/ASK_PHP",
-  "name": "poker-game",
+  "name": "poker",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "classnames": "^2.2.6",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-jss": "^10.0.4",
-    "react-scripts": "3.3.1"
+    "@babel/polyfill": "^7.0.0",
+    "axios": "^0.19.0",
+    "core-js": "^2.5.7",
+    "immer": "^1.7.2",
+    "lodash": "^4.17.11",
+    "raf": "^3.4.1",
+    "react": "^16.5.2",
+    "react-compound-slider": "^0.16.2",
+    "react-dom": "^16.5.2",
+    "react-responsive": "^8.0.1",
+    "react-scripts": "^1.1.5",
+    "react-transition-group": "^4.0.1",
+    "styled-components": "^4.4.1",
+    "uuid": "^3.3.2"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "gh-pages": "^2.2.0",
-    "react-test-renderer": "^16.12.0"
+    "babel-polyfill": "^6.26.0"
   }
 }
