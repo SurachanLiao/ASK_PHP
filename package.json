@@ -8,6 +8,7 @@
     "core-js": "^2.5.7",
     "immer": "^1.7.2",
     "lodash": "^4.17.11",
+    "npm-i": "0.0.2",
     "raf": "^3.4.1",
     "react": "^16.5.2",
     "react-compound-slider": "^0.16.2",
