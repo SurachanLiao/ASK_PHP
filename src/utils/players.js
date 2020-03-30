@@ -8,7 +8,7 @@ const generateTable = async (numPlayers) => {
 	if (numPlayers < 1 || numPlayers > 6) {
 		throw new Error("generateTableOpts = 1 to 6")
 	}
-	const players = [{
+	let players = [{
 		id: uuid(),
 		name: 'Mikeypoo',
 		avatarURL: '/assets/boy.svg',

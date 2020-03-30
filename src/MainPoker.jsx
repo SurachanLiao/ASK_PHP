@@ -98,7 +98,7 @@ function analyzeScreen() {
   console.log(window)
 }
 
-class App extends Component {
+class MainPoker extends Component {
   state = {
     loading: true,
     winnerFound: null,
@@ -122,6 +122,8 @@ class App extends Component {
     playActionMessages: [],
     playerAnimationSwitchboard: {},
     animeSwitchboard: {},
+    userName: null,
+    userProfile: null
   }
 
   cardAnimationDelay = 0;
@@ -290,6 +292,8 @@ class App extends Component {
             phase={phase}
             playerAnimationSwitchboard={playerAnimationSwitchboard}      
             endTransition={this.popAnimationState}
+            userName = {this.state.userName}
+            userProfile = {this.state.user}
           />
       )
       return result
@@ -477,4 +481,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default MainPoker;
