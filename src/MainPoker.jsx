@@ -81,15 +81,7 @@ const CheckScreen = () => {
  
   return (
     <div>
-      <h1>Device Test!</h1>
-      {isDesktopOrLaptop && <div>
-        <p>You are a desktop or laptop</p>
-        {isBigScreen && <p>You also have a huge screen</p>}
-        {isTabletOrMobile && <p>You are sized like a tablet or mobile phone though</p>}
-      </div>}
-      {isTabletOrMobileDevice && <p>You are a tablet or mobile phone</p>}
-      <p>Your are in {isPortrait ? 'portrait' : 'landscape'} orientation</p>
-      {isRetina && <p>You are retina</p>}
+
     </div>
   )
 }
@@ -142,7 +134,6 @@ class MainPoker extends Component {
 
   async componentDidMount() {
     analyzeScreen();
-    console.log("HELLO!?")
 
     const { players, playerAnimationSwitchboard } = await generateTable(NUM_AI_PLAYERS);
     const dealerIndex = Math.floor(Math.random() * Math.floor(players.length));
