@@ -3,7 +3,7 @@ import "@babel/polyfill";
 import 'core-js/es6/map';
 import 'core-js/es6/set';
 import 'raf/polyfill';
-
+import Menubar from './Appbar.js';
 import React, { Component } from 'react';
 import {useMediaQuery} from 'react-responsive';
 
@@ -460,6 +460,7 @@ class MainPoker extends Component {
     return (
       <div className="App">
         <div className='poker-table--wrapper'> 
+        <Menubar/>
           { 
             (this.state.loading) ? <Spinner/> : 
             (this.state.winnerFound) ? <WinScreen /> : 

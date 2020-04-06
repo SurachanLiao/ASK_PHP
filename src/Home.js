@@ -560,7 +560,12 @@ class Home extends Component {
             </div>
       )
     } else if (this.state.renderGame === true && this.state.renderGameId === 1){
-      return (<MainPoker userProfile = {this.state.user.photoURL} userName = {this.state.user.displayName}/>)
+      return (
+        <MainPoker/>
+        )
+
+  
+    
     }
     
 } 
