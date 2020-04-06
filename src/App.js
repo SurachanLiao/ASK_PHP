@@ -76,7 +76,8 @@ class App extends Component {
       value: 0,
       slideIndex: 0,
       allUsers:[],
-      participatelogin:false
+      participatelogin:false,
+      signup: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -279,117 +280,122 @@ class App extends Component {
     const { value } = this.state;
 
   if(!this.state.user && (this.state.submitGC===false)){
-    return (
+    if (this.state.signup === false){
+      return (
 
-      <div className={classes.root}>
-        <AppBar position="static" background="black">
-          <Tabs
-            onChange={this.handleChange}
-            // scrollable
-            //scrollButtons="on"
-            indicatorColor="white"
-            textColor="white"
-            value={this.state.slideIndex}
-            centered
-            boxShadow="none"
+        <div className={classes.root}>
+          <AppBar position="static" background="black">
+            <Tabs
+              onChange={this.handleChange}
+              // scrollable
+              //scrollButtons="on"
+              indicatorColor="white"
+              textColor="white"
+              value={this.state.slideIndex}
+              centered
+              boxShadow="none"
+            >
+              <Tab className="tab" label="Home" icon={<HomeIcon />} />
+              <Tab className="tab"  label="Groups" icon={<GroupIcon />} />
+  
+            </Tabs>
+          </AppBar>
+          <SwipeableViews
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleChange}
           >
-            <Tab className="tab" label="Home" icon={<HomeIcon />} />
-            <Tab className="tab"  label="Groups" icon={<GroupIcon />} />
-
-          </Tabs>
-        </AppBar>
-        <SwipeableViews
-          index={this.state.slideIndex}
-          onChangeIndex={this.handleChange}
-        >
-        {/* rendering the first tab of the page with the admin  sign in user journey*/}
-        {value === 0 && <TabContainer className="tab">
-             {/*}
-              {
-                this.state.user?
-                <button onClick={this.logout}>Log Out </button>
+          {/* rendering the first tab of the page with the admin  sign in user journey*/}
+          {value === 0 && <TabContainer className="tab">
+               {/*}
+                {
+                  this.state.user?
+                  <button onClick={this.logout}>Log Out </button>
+                  :
+                  <button onClick={this.login}>Login In</button>
+                }*/}
+          <div style={loginStyles}> 
+          <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
+          <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+              
+              {this.state.user ?
+                <div>
+                  <div className='user-profile'>
+                    <img src={this.state.user.photoURL} alt={alternate} />
+                  </div>
+                </div>
                 :
-                <button onClick={this.login}>Login In</button>
-              }*/}
-        <div style={loginStyles}> 
+                <div className='text_input'>
+                <h5>Log in or join now to get started!</h5>
+                </div>
+            }     
+                <section className='add-item'>
+                      <form onSubmit={this.handleSubmit}>
+                      {/*this is where we need to modify to math current website
+                        <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username} />
+                        <input type="text" name="currentItem" placeholder="What are you bringing?" onChange={this.handleChange} value={this.state.currentItem} />
+                        <button>Add Item</button>
+                      */}
+                      <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
+                      <input style={{color:"white",width: "98%" , backgroundColor :'black'}} type="text" id= "email" name="email" placeholder="Email" />
+                      <input style={{color:"white",width: "98%", backgroundColor :'black'}} type="password" id= "password" name="password" placeholder="Password" />
+                      
+                      <button style={{width: "100%", backgroundColor:"#primary", borderColor:"black"}} type="submit" className="btn btn-primary" value="Log In" onClick={this.login} block> Sign in </button>
+                      <ReactTooltip id = "signup"/>
+                      
+                      <hr style={{marginTop: "10px", marginBottom: "10px"}} />
+                      </div>
+                </form>
+                </section>
+       <div class = "padding1"></div>  
+                <section className='add-item'>
+                      <form onSubmit={this.handleSubmit}>
+                      <button style={{width: "100%", backgroundColor:"primary", color:"#primary", borderColor:"black", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={()=>this.setState({signup:true})} block> Join Now</button>
+                      <div class = "padding1"></div>  
+                     {this.state.user?
+                    <button style={{width: "100%", backgroundColor:"primary", borderColor:"#black", marginTop: "2%"}} className="btn btn-primary" onClick = {this.logout}> Logout of Google</button>
+                      :
+                    <button style={{width: "100%", backgroundColor:"primary", textAlign:"center", color:"primary", borderColor:"black", marginTop: "2%"}} className="btn btn-primary" onClick={this.gmailLogin}> 
+                    <img alt = "" src={Google} style={{width:"8%", float:"left", maxWidth:"25px"}} />
+                     Join with Google</button>
+                     }  
+                     <div class = "padding1"></div>            
+                      </form>
+                </section>
+              
+            </div>
+            </div>
+            
+          </TabContainer>}
+          {/* rendering the second tab of the page with the group code user journey*/}
+          {value === 1 && <TabContainer className="tab">
+            <form onSubmit={this.handleSubmit}>
+        <div style={loginStyles}>  
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
         <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
-            
-            {this.state.user ?
-              <div>
-                <div className='user-profile'>
-                  <img src={this.state.user.photoURL} alt={alternate} />
-                </div>
-              </div>
-              :
-              <div className='text_input'>
-              <h5>Log in or join now to get started!</h5>
-              </div>
-          }     
-              <section className='add-item'>
-                    <form onSubmit={this.handleSubmit}>
-                    {/*this is where we need to modify to math current website
-                      <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username} />
-                      <input type="text" name="currentItem" placeholder="What are you bringing?" onChange={this.handleChange} value={this.state.currentItem} />
-                      <button>Add Item</button>
-                    */}
-                    <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-                    <input style={{width: "98%" , backgroundColor :'black'}} type="text" id= "email" name="email" placeholder="Email" />
-                    <input style={{width: "98%", backgroundColor :'black'}} type="password" id= "password" name="password" placeholder="Password" />
-                    
-                    <button style={{width: "100%", backgroundColor:"#primary", borderColor:"black"}} type="submit" className="btn btn-primary" value="Log In" onClick={this.login} block> Sign in </button>
-                    <ReactTooltip id = "signup"/>
-                    
-                    <hr style={{marginTop: "10px", marginBottom: "10px"}} />
-                    </div>
-              </form>
-              </section>
-     <div class = "padding1"></div>  
-              <section className='add-item'>
-                    <form onSubmit={this.handleSubmit}>
-                    <button style={{width: "100%", backgroundColor:"primary", color:"#primary", borderColor:"black", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={()=>window.location.hash='/SignUp'} block> Join Now</button>
-                    <div class = "padding1"></div>  
-                   {this.state.user?
-                  <button style={{width: "100%", backgroundColor:"primary", borderColor:"#black", marginTop: "2%"}} className="btn btn-primary" onClick = {this.logout}> Logout of Google</button>
-                    :
-                  <button style={{width: "100%", backgroundColor:"primary", textAlign:"center", color:"primary", borderColor:"black", marginTop: "2%"}} className="btn btn-primary" onClick={this.gmailLogin}> 
-                  <img alt = "" src={Google} style={{width:"8%", float:"left", maxWidth:"25px"}} />
-                   Join with Google</button>
-                   }  
-                   <div class = "padding1"></div>            
-                    </form>
-              </section>
-            
-          </div>
-          </div>
-          
-        </TabContainer>}
-        {/* rendering the second tab of the page with the group code user journey*/}
-        {value === 1 && <TabContainer className="tab">
-          <form onSubmit={this.handleSubmit}>
-      <div style={loginStyles}>  
-      <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-      <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
-      <h5>Welcome to Poker!</h5>
-      <p>Enter the shared group code to join the group</p>
-      <input onChange={(e)=>this.handleChangeName(e)} style={{width: "98%" , backgroundColor:'black'}} type="text" name="Name" placeholder="Your Name" />
-      <input onChange={(e)=>this.handleChangeGC(e)} style={{width: "98%", backgroundColor:'black'}} type="text" name="GroupCode" placeholder="Group Code" />
-      <button style={{width: "100%", backgroundColor:"primary", borderColor:"black"}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Group</button>
-      <div class = "padding2"></div>
+        <h5>Welcome to Poker!</h5>
+        <p>Enter the shared group code to join the group</p>
+        <input onChange={(e)=>this.handleChangeName(e)} style={{color:"white",width: "98%" , backgroundColor:'black'}} type="text" name="Name" placeholder="Your Name" />
+        <input onChange={(e)=>this.handleChangeGC(e)} style={{color:"white", width: "98%", backgroundColor:'black'}} type="text" name="GroupCode" placeholder="Group Code" />
+        <button style={{width: "100%", backgroundColor:"primary", borderColor:"black"}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Group</button>
+        <div class = "padding2"></div>
+        </div>
+        </div>
+  
+        </form>
+          </TabContainer>}
+  
+              </SwipeableViews>
+              <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
+              <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
+              <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
+              <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
       </div>
-      </div>
-
-      </form>
-        </TabContainer>}
-
-            </SwipeableViews>
-            <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
-            <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
-    </div>
-
-    )} 
+  
+      )
+    } else{
+      return (<SignUp/>)
+    }
+    } 
     else {
       if(this.state.submitGC===false){
       return (<Home username ={this.username} userInGroup = {this.username}/>)} 

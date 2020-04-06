@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import firebase from 'firebase'
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
-import logo from './images/logo.jpeg';
-import Main from './MainPoker'
-
+import './styles/App.css';
+import pokerlogo from './images/poker_b.jpeg';
+import decll from './images/dec-ll.png';
+import declr from './images/dec-lr.png';
+import dectr from './images/dec-tr.png';
+import dectl from './images/dec-tl.png'
+import { withStyles } from '@material-ui/core/styles';
 
 const loginStyles = {
     width: "100%",
@@ -16,11 +14,22 @@ const loginStyles = {
     margin: "20px auto",
     borderRadius: "5%",
     padding: "5%",
-    background: "white",
+    background: "black",
     color: "black",
     boxshadow: "10px 10px gray",
     borderColor: "#0077B5",
   }
+  const styles = theme => ({
+    root: {
+      flexGrow: 0.1,
+      width: '100%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: "black",
+    }
+});
 
 class SignUp extends Component {
     constructor(){
@@ -64,21 +73,29 @@ class SignUp extends Component {
      });
    }
     render(){
+        const { classes } = this.props;
         return (
+            <div className = {classes.root}>
             <div style={loginStyles}> 
             <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-            <img src={logo} style={{width:"80%", maxWidth:"150px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+            <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
         {/*sign up form to create a new account*/}
         <form>
-            <input style={{width: "98%"}} type="text" id= "email" name="email" placeholder="Enter Email" />
-            <input style={{width: "98%"}} type="password" id= "password" name="password" placeholder="Create Password" />
-            <input style={{width: "98%"}} type="password" id= "password2" name="password2" placeholder="Verify Password" />
-            <button style={{width: "100%", backgroundColor:"#0077B5", borderColor:"#0077B5", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={this.signup} block> Create Account</button>
+            <input style={{color:"white", width: "98%" ,backgroundColor:"black"}} type="text" id= "email" name="email" placeholder="Enter Email" />
+            <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="password" id= "password" name="password" placeholder="Create Password" />
+            <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="password" id= "password2" name="password2" placeholder="Verify Password" />
+            <button style={{width: "100%", borderColor:"black", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={this.signup} block> Create Account</button>
                 
         </form>
+        <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
+              <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
+              <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
+              <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
+                <div className = "padding2"></div>
         </div>
         </div> 
+        </div>
         )
     }
 }
-export default SignUp;
+export default withStyles(styles)(SignUp);

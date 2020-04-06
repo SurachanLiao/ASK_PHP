@@ -20,7 +20,6 @@ import Google from './images/googlefront.jpg';
 import pokerlogo from './images/poker_b.jpeg';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
@@ -36,7 +35,19 @@ import decll from './images/dec-ll.png';
 import declr from './images/dec-lr.png';
 import dectr from './images/dec-tr.png';
 import dectl from './images/dec-tl.png'
-
+import poker_i from './images/poker_i.jpeg'
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import IconButton from '@material-ui/core/IconButton';
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from '@material-ui/core/Tooltip';
+import Slider from '@material-ui/core/Slider';
 
 // page styling
 
@@ -77,10 +88,75 @@ function TabContainer(props) {
     </Typography>
   );
 }
+const PrettoSlider = withStyles({
+  root: {
+    color: '#52af77',
+    height: 8,
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -8,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit',
+    },
+  },
+  active: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+  track: {
+    height: 8,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 8,
+    borderRadius: 4,
+  },
+})(Slider);
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+ValueLabelComponent.propTypes = {
+  children: PropTypes.element.isRequired,
+  open: PropTypes.bool.isRequired,
+  value: PropTypes.number.isRequired,
+};
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+    </MuiDialogTitle>
+  );
+});
+function ValueLabelComponent(props) {
+  const { children, open, value } = props;
+
+  return (
+    <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
+      {children}
+    </Tooltip>
+  );
+}
+
+const DialogContent = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles((theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
 
 // theme styling
 const styles = theme => ({
@@ -102,10 +178,17 @@ const styles = theme => ({
   gridList: {
     width: 500,
     height: 450,
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
   },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
+  },
+  tab: {
+    width:'100%',
   }
+
 });
 
 
@@ -127,7 +210,10 @@ class Home extends Component {
       slideIndex: 0,
       allUsers:[],
       participatelogin:false,
-      renderGame:0
+      renderGame:false,
+      renderGameId:0,
+      mobileMoreAnchorEl: null,
+      dialog:false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -295,6 +381,7 @@ class Home extends Component {
         currentComponent.setState({ user });
       } 
     });
+    console.log(this.state.menubar)
     
   }    
 
@@ -318,13 +405,11 @@ class Home extends Component {
   render() {
     
     const { classes } = this.props;
-    const { value } = this.state;
+    const { value , mobileMoreAnchorEl} = this.state;
+    
 
-    if(this.state.renderGame === 0){
+    if(this.state.renderGame === false){
       return (
-
-
-        <div>
              <div className={classes.root}>
              {this.state.user ?
                   <AppBar position="static">
@@ -332,10 +417,8 @@ class Home extends Component {
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                       {/* <MenuIcon /> */}
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}   >
-                    Welcome, {this.state.user.displayName}
-                    </Typography>
-                    <Tabs
+                    <Avatar src={poker_i}  className={classes.big}/>
+                    <Tabs className = {classes.title}
                         onChange={this.handleChange}
                         // scrollable
                         //scrollButtons="on"
@@ -349,13 +432,38 @@ class Home extends Component {
                         <Tab centered className="tab"  label="Groups" icon={<GroupIcon />} />
   
                     </Tabs>
-                    <Avatar src={this.state.user.photoURL} alt = {this.state.user.displayName} className={classes.big}/>
+                    <Avatar src={this.state.user.photoURL} alt = {this.state.user.displayName} 
+                    className={classes.big}  onClick={(e)=>this.setState({mobileMoreAnchorEl: e.currentTarget})}/>
+                    <Menu
+                id="lock menu"
+                anchorEl = {mobileMoreAnchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                keepMounted
+                open = {Boolean(mobileMoreAnchorEl)}
+                onClose={()=>this.setState({mobileMoreAnchorEl: null})}
+                >
+
+                  <MenuItem > 
+                  <IconButton>
+                  <AccountCircle />
+                  </IconButton>
+                  <p>Profile</p>
+                  </MenuItem>
+                  <MenuItem onClick = {()=>this.logout()}> 
+                  <IconButton >
+                    <ExitToAppIcon />
+                  </IconButton>
+                  <p>Log Out</p>
+                  </MenuItem>
+                </Menu>
                   </Toolbar>
 
                 </AppBar>
+
                 :
                 <div className='text_input'>
-                <h5>Welcome, {this.username}!</h5>
+                <h5>Welcome, {this.state.username}!</h5>
                 </div>
             }     
 
@@ -364,19 +472,19 @@ class Home extends Component {
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
           >
-          {/* rendering the first tab of the page with the admin  sign in user journey*/}
-          {value === 0 && <TabContainer className="tab" backgroundColor = "black">
+          {/* rendering the first tab of the page with the admin  sign in user journey */}
+          {value === 0 && <TabContainer width='100%' className="tab" backgroundColor = "black">
           <div style={{textAlign: "center" , backgroundColor :"black"}} className="pt-callout pt-icon-info-sign">
-          <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+          <img src={pokerlogo} style={{width:"100%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
               
 
             <GridList align="center"
-            cellHeight={180} className={classes.gridList} backgroundColor = "black">
-          <GridListTile key="Subheader" cols={2} style={{ height: 'auto' }}>
-          </GridListTile>
+            // cellHeight={180} 
+            spacing = {20} className={classes.gridList} backgroundColor = "black" cols={2.5} >
+        
           {tileData.map((tile) => (
             <GridListTile key={tile.img} >
-              <img src={tile.img} alt={tile.title} onClick={()=>this.setState({renderGame:tile.id} )}/>
+              <img src={tile.img} alt={tile.title} onClick={()=>this.setState({dialog:true, renderGameId: tile.id} )}/>
               <GridListTileBar onClick={()=>this.displayInfo(tile)}
                 title={tile.title}
                 actionIcon={
@@ -388,6 +496,24 @@ class Home extends Component {
             </GridListTile>
           ))}
         </GridList>
+
+        <Dialog onClose={()=>this.setState({dialog:false})} aria-labelledby="customized-dialog-title" open={this.state.dialog}>
+        <DialogTitle id="customized-dialog-title" onClose={()=>this.setState({dialog:false})}>
+          How much do you want to start with?
+        </DialogTitle>
+                
+
+          <PrettoSlider valueLabelDisplay="auto" aria-label="pretto slider" width='80%' defaultValue={20} 
+          color = "primary" max = {100} min = {0}/>
+
+
+        <DialogActions>
+          <Button autoFocus onClick={()=>this.setState({dialog:false, renderGame:true})} color="primary">
+            Start the game
+          </Button>
+        </DialogActions>
+      </Dialog>
+        
              <br />
                 <section className='add-item'>
                       <form onSubmit={this.handleSubmit}>
@@ -403,7 +529,7 @@ class Home extends Component {
 
 </div>
           </TabContainer>}
-          {/* rendering the second tab of the page with the group code user journey*/}
+         {/* rendering the second tab of the page with the group code user journey */}
           {value === 1 && <TabContainer className="tab" backgroundColor = 'black'>
             <form onSubmit={this.handleSubmit}>
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
@@ -422,17 +548,18 @@ class Home extends Component {
               </div>
         </form>
           </TabContainer>}
-  
+
               </SwipeableViews>
               
-      </div>
+      
+    
       <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
             <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
             <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
             <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
-      </div>
+            </div>
       )
-    } else if (this.state.renderGame === 1){
+    } else if (this.state.renderGame === true && this.state.renderGameId === 1){
       return (<MainPoker userProfile = {this.state.user.photoURL} userName = {this.state.user.displayName}/>)
     }
     
