@@ -1,0 +1,372 @@
+#txt1{
+    font-size:10px;
+    line-height:10px;
+    color: #A9A9A9;
+    font-style: normal;
+    font-family: 'Roboto', sans-serif;
+  
+   }
+  
+  
+   #scroll-container{
+     scroll-behavior: unset;
+     overflow: hidden;
+   }
+  
+   .tab {
+    text-emphasis-color:  #00A0Dc;
+    background-color:  #00A0Dc;
+   }
+  
+  .App-background {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    bottom:0px; 
+    top: 0px; 
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  
+  
+  .centered {
+    float: center;
+    display:block;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  
+  .firstplace {
+    height:100px;
+    float: center;
+    display:block;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  
+  .tabBarContainer {
+    float: center;
+  }
+  
+  .header {
+    color: #fff;
+    background-color: #3b5998;
+    box-shadow: 0 5px 3px -3px #3b6698;
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  
+  .header2 {
+    color: #fff;
+    background-color: #dd4b39;
+    box-shadow: 0 5px 3px -3px #d85645;
+  }
+  
+  /* Displays for our app logo*/ 
+  .App-logo2 {
+    animation: App-logo-spin infinite 20s linear;
+    border-top: solid 20px rgba(255,255,255);
+    height: 150px;
+    float:center;
+    display:block;
+    margin: 0 auto;
+  }
+  
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+    height: 70px;
+    float:center;
+  }
+  
+  button {
+    border-top: solid 5px rgba(255,255,255);
+    padding: 9px 12px;
+    margin: 0 2px;
+    border-radius: 10px;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #3B5998;
+    color: #fff;
+    font-weight: 100; 
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  .bottomleft {
+    position: relative;
+    bottom: 0px;
+    left: 0px;
+  }
+  .bottomright {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+  }
+  .topleft {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  .topright {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+  }
+  button2 {
+    border-top: solid 5px rgba(255,255,255);
+    padding: 9px 12px;
+    margin: 0 2px;
+    border-radius: 2px;
+    font-weight: lighter;
+    letter-spacing: 1px;
+    font-size: 15px;
+    cursor: pointer;
+    background-color: #3B5998;
+    color: #fff;
+    font-weight: 100; 
+    float: center;
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  
+  button:active {
+    outline: none;
+  }
+  button2:active {
+    outline: none;
+  }
+  
+  .title-container__title {
+    font-size: 40px;
+    letter-spacing: 2px;
+    line-height: 1.3;
+    font-family: 'Roboto Slab', serif;
+  }
+  
+  form input{
+    float: left;
+    width: 38%;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid #eee;
+    margin: 0 1%;
+    padding: 10px;
+    display: block;
+    box-sizing: border-box;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+  
+  }
+  
+  .text_input{
+    float: center;
+    text-align: center;
+  }
+  
+  .location_input{
+    width: 85%;
+    margin: 0;
+    border: 0;
+    border-bottom: 1px solid #eee;
+    margin: 0 1%;
+    padding: 10px;
+    display: block;
+    box-sizing: border-box;
+    font-size: 18px;
+  }
+  
+  .center{
+      width: 100%;
+      float: center;
+      display:block;
+      max-width: 500px;
+      text-align: center;
+      margin: 0 auto;
+      font-family: 'Roboto', sans-serif;
+  
+  }
+  .padding1 {
+      padding:400px
+  }
+
+  .padding2 {
+    padding:124px
+}
+  
+  .loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+  }
+  .loading-bar {
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    border-radius: 4px;
+    animation: loading 1s ease-in-out infinite;
+  }
+  .loading-bar:nth-child(1) {
+    background-color: #3498db;
+    animation-delay: 0;
+  }
+  .loading-bar:nth-child(2) {
+    background-color: #c0392b;
+    animation-delay: 0.09s;
+  }
+  .loading-bar:nth-child(3) {
+    background-color: #f1c40f;
+    animation-delay: .18s;
+  }
+  .loading-bar:nth-child(4) {
+    background-color: #27ae60;
+    animation-delay: .27s;
+  }
+  
+  @keyframes loading {
+    0% {
+      transform: scale(1);
+    }
+    20% {
+      transform: scale(1, 2.2);
+    }
+    40% {
+      transform: scale(1);
+    }
+  }
+  
+  
+  .wheelimage {
+    width: 95%
+  }
+  
+  .wheelimage1 {
+    animation: rotate-keyframes1 2s;
+    transform: rotate(3960deg);
+    width: 95%
+  }
+  .wheelimage2 {
+    animation: rotate-keyframes2 2s;
+    transform: rotate(3645deg);
+    width: 95%
+  }
+  
+  .wheelimage3 {
+    animation: rotate-keyframes3 2s;
+    transform: rotate(3690deg);
+    width: 95%
+  }
+  
+  .wheelimage4 {
+    animation: rotate-keyframes4 2s;  
+    transform: rotate(3735deg);
+    width: 95%
+  }
+  
+  .wheelimage5 {
+    animation: rotate-keyframes5 2s;  
+    transform: rotate(3780deg);
+    width: 95%
+  }
+  
+  .wheelimage6 {
+    animation: rotate-keyframe6 2s;  
+    transform: rotate(3825deg);
+    width: 95%
+  }
+  
+  .wheelimage7 {
+    animation: rotate-keyframes7 2s;  
+    transform: rotate(3870deg);
+    width: 95%
+  }
+  
+  .wheelimage8 {
+    animation: rotate-keyframes8 2s;  
+    transform: rotate(3915deg);
+    width: 95%
+  }
+  
+  @keyframes rotate-keyframes1 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3960deg);
+    }
+   }
+  
+  @keyframes rotate-keyframes2 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3645deg);
+    }
+   }
+  
+   @keyframes rotate-keyframes3 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3690deg);
+    }
+   }
+  
+   @keyframes rotate-keyframes4 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3735deg);
+    }
+   }
+  
+   @keyframes rotate-keyframes5 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3780deg);
+    }
+   }
+  
+   @keyframes rotate-keyframes6 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3825deg);
+    }
+   }
+  
+   @keyframes rotate-keyframes7 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3870deg);
+    }
+   }
+  
+   @keyframes rotate-keyframes8 {
+    from {
+     transform: rotate(0deg);
+    }
+   
+    to {
+     transform: rotate(3915deg);
+    }
+   }
