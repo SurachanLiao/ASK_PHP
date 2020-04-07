@@ -324,7 +324,7 @@ class App extends Component {
               </div>
               :
               <div className='text_input'>
-              <h5>Log in or join now to get started!</h5>
+              <h5 style={{color: "white"}}>Log in or join now to get started!</h5>
               </div>
           }     
               <section className='add-item'>
@@ -335,8 +335,8 @@ class App extends Component {
                       <button>Add Item</button>
                     */}
                     <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-                    <input style={{width: "98%" , backgroundColor :'black'}} type="text" id= "email" name="email" placeholder="Email" />
-                    <input style={{width: "98%", backgroundColor :'black'}} type="password" id= "password" name="password" placeholder="Password" />
+                    <input style={{width: "98%" , backgroundColor :'white'}} type="text" id= "email" name="email" placeholder="Email" />
+                    <input style={{width: "98%", backgroundColor :'white'}} type="password" id= "password" name="password" placeholder="Password" />
                     
                     <button style={{width: "100%", backgroundColor:"#primary", borderColor:"black"}} type="submit" className="btn btn-primary" value="Log In" onClick={this.login} block> Sign in </button>
                     <ReactTooltip id = "signup"/>

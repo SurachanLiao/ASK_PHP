@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import App from './App';
 import './styles/Home.css';
 import {auth, provider, facebookProvider} from './firebase.js';
 import MainPoker from './MainPoker.jsx';
@@ -13,6 +14,7 @@ import Tab from '@material-ui/core/Tab';
 import Avatar from '@material-ui/core/Avatar';
 import HomeIcon from '@material-ui/icons/Home';
 import TimeIcon from '@material-ui/icons/Timer';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GroupIcon from '@material-ui/icons/Group';
 import Typography from '@material-ui/core/Typography';
 import SwipeableViews from 'react-swipeable-views';
@@ -326,7 +328,7 @@ class Home extends Component {
 
         <div>
              <div className={classes.root}>
-             {this.state.user ?
+             {this.state.user ? // what are properties of user: we can add more properties to this user instead of making player class?
                   <AppBar position="static">
                   <Toolbar>
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -348,6 +350,7 @@ class Home extends Component {
                         <Tab centered className="tab" label="Home" icon={<HomeIcon />} />
                         <Tab centered className="tab"  label="Groups" icon={<GroupIcon />} />
                         <Tab className="tab"  label="Profile" icon={<TimeIcon />} />
+                        {/* <Tab className="tab"  label="logout" icon={<ExitToAppIcon />} /> */}
   
                     </Tabs>
                     <Avatar src={this.state.user.photoURL} alt = {this.state.user.displayName} className={classes.big}/>
@@ -414,7 +417,7 @@ class Home extends Component {
         <h3 style={{color: "white"}}>Enter the shared group code to join the group</h3>
         <br />
         
-        <input onChange={(e)=>this.handleChangeGC(e)} style={{width: "98%", backgroundColor : "black"}} type="text" name="GroupCode" placeholder="Group Code" />
+        <input onChange={(e)=>this.handleChangeGC(e)} style={{width: "98%", backgroundColor : "white"}} type="text" name="GroupCode" placeholder="Group Code" />
   
         <br />
         <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Group</button>
@@ -426,24 +429,31 @@ class Home extends Component {
           </TabContainer>}
 
           {/* rendering the third tab of the page with the group code user journey*/}
+          {/* profile tab: displaying user's info: username, level, photo, current&highest coin, win/loss/total game */}
           {value === 2 && <TabContainer className="tab" backgroundColor = 'black'>
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
         <br />
         <div style={{color: "white"}}>
-        <h2> {this.username}, 25 </h2>
-          <img alt="player-photo" style={{width:"25%", maxWidth:"200px", float:"center", margin:"5%"}} className="photo" src={alternate} />
+        <h2> {this.state.user.displayName}, 25 </h2>
+          <img alt="player-photo" style={{width:"25%", maxWidth:"200px", float:"center", margin:"5%"}} className="photo" src={this.state.user.photoURL} />
           <h3>Current coin: 500</h3>
           <h3>Highest coin: 1000</h3>
-          <h3>Win/lost : 100/50</h3>
-          <h3>Total game: 150</h3>
+          <h3>Win/lost : 50/50</h3>
+          <h3>Total game: 100</h3>
         </div>
         <br />
-        
+        {/* we can create a database for user in firebase with required properties then retrive and show them here {console.log(this.state.user)} */}
         </div>
               <div class="padding">
 
               </div>
           </TabContainer>}
+
+          {/* rendering the fourth tab of the page: logout tab
+          {value === 3 && <TabContainer className="tab" backgroundColor = 'black'>
+            {this.logout()}
+            {this.setState({renderGame:2})}
+          </TabContainer>} */}
   
               </SwipeableViews>
               
