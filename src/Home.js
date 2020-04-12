@@ -12,7 +12,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Avatar from '@material-ui/core/Avatar';
 import HomeIcon from '@material-ui/icons/Home';
-import TimeIcon from '@material-ui/icons/Timer';
+import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import Typography from '@material-ui/core/Typography';
 import SwipeableViews from 'react-swipeable-views';
@@ -430,6 +430,7 @@ class Home extends Component {
                       >
                         <Tab centered className="tab" label="Home" icon={<HomeIcon />} />
                         <Tab centered className="tab"  label="Groups" icon={<GroupIcon />} />
+                        <Tab className="tab"  label="Profile" icon={<PersonIcon />} />
   
                     </Tabs>
                     <Avatar src={this.state.user.photoURL} alt = {this.state.user.displayName} 
@@ -548,6 +549,26 @@ class Home extends Component {
 
               </div>
         </form>
+          </TabContainer>}
+          {/* rendering the third tab of the page */}
+          {/* profile tab: displaying user's info: username, level, photo, current&highest coin, win/loss/total game */}
+          {value === 2 && <TabContainer className="tab" backgroundColor = 'black'>
+        <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
+        <br />
+        <div style={{color: "white"}}>
+        <h2> {this.state.user.displayName}, 25 </h2>
+          <img alt="player-photo" style={{width:"25%", maxWidth:"200px", float:"center", margin:"5%"}} className="photo" src={this.state.user.photoURL} />
+          <h3>Current coin: 500</h3>
+          <h3>Highest coin: 1000</h3>
+          <h3>Win/lost : 50/50</h3>
+          <h3>Total game: 100</h3>
+        </div>
+        <br />
+        {/* we can create a database for user in firebase with required properties then retrive and show them here {console.log(this.state.user)} */}
+        </div>
+              <div class="padding">
+
+              </div>
           </TabContainer>}
 
               </SwipeableViews>
