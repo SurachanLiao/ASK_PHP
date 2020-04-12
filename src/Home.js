@@ -434,32 +434,33 @@ class Home extends Component {
                     </Tabs>
                     <Avatar src={this.state.user.photoURL} alt = {this.state.user.displayName} 
                     className={classes.big}  onClick={(e)=>this.setState({mobileMoreAnchorEl: e.currentTarget})}/>
-                    <Menu
-                id="lock menu"
-                anchorEl = {mobileMoreAnchorEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                keepMounted
-                open = {Boolean(mobileMoreAnchorEl)}
-                onClose={()=>this.setState({mobileMoreAnchorEl: null})}
-                >
 
-                  <MenuItem > 
-                  <IconButton>
-                  <AccountCircle />
-                  </IconButton>
-                  <p>Profile</p>
-                  </MenuItem>
-                  <MenuItem onClick = {()=>this.logout()}> 
-                  <IconButton >
-                    <ExitToAppIcon />
-                  </IconButton>
-                  <p>Log Out</p>
-                  </MenuItem>
-                </Menu>
-                  </Toolbar>
+{/* this menu is shown on when mobileMoreAnchorEl is true */}
+<Menu
+  id="lock menu" anchorEl = {mobileMoreAnchorEl} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+  transformOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted
+  open = {Boolean(mobileMoreAnchorEl)}  onClose={()=>this.setState({mobileMoreAnchorEl: null})}>
+  {/* display the profile menu item */}
+  <MenuItem > 
+    <IconButton>
+      <AccountCircle />
+    </IconButton>
+    <p>Profile</p>
+  </MenuItem>
+  {/* display the log out menu item */}
+  <MenuItem onClick = {()=>this.logout()}> 
+    <IconButton >
+      <ExitToAppIcon />
+    </IconButton>
+    <p>Log Out</p>
+  </MenuItem>
+</Menu>
 
-                </AppBar>
+
+
+  </Toolbar>
+
+</AppBar>
 
                 :
                 <div className='text_input'>
