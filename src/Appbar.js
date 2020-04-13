@@ -15,6 +15,7 @@ import firebase from 'firebase';
 import {auth, provider, facebookProvider} from './firebase.js';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -38,7 +39,7 @@ function logout() {
     document.location.reload();
   }
 
-export default function MenuAppBar() {
+export default function MenuAppBar(props) {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -61,7 +62,7 @@ export default function MenuAppBar() {
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <KeyboardReturnIcon onClick = {()=>window.location.reload()} />
+            <KeyboardReturnIcon onClick = {()=>props.doneWithGame()} />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             

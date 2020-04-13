@@ -32,21 +32,23 @@ const loginStyles = {
 });
 
 class SignUp extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
-            user:null
+            user:null,
+            submit: false,
         }
     }
-    signup(){
+    login(){
+      
         var email = document.getElementById("email").value;
         var password = document.getElementById("password").value;
         var password2 = document.getElementById("password2").value;
- 
+    
         if(password===password2){
-        firebase.auth().createUserWithEmailAndPassword(email, password)       
+          firebase.auth().createUserWithEmailAndPassword(email, password)       
          .then(function(user){
-             user = firebase.auth().currentUser;
+          user = firebase.auth().currentUser;
              this.setState({
                  user
              })
@@ -60,6 +62,7 @@ class SignUp extends Component {
          else{
              alert("Please ensure both passwords match.")
          }
+
      }
 
 
@@ -84,7 +87,7 @@ class SignUp extends Component {
             <input style={{color:"white", width: "98%" ,backgroundColor:"black"}} type="text" id= "email" name="email" placeholder="Enter Email" />
             <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="password" id= "password" name="password" placeholder="Create Password" />
             <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="password" id= "password2" name="password2" placeholder="Verify Password" />
-            <button style={{width: "100%", borderColor:"black", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={this.signup} block> Create Account</button>
+            <button style={{width: "100%", borderColor:"black", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={this.login} block> Create Account</button>
                 
         </form>
         <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>

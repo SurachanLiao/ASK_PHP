@@ -22,7 +22,8 @@ import pokerlogo from './images/poker_b.jpeg';
 import decll from './images/dec-ll.png';
 import declr from './images/dec-lr.png';
 import dectr from './images/dec-tr.png';
-import dectl from './images/dec-tl.png'
+import dectl from './images/dec-tl.png';
+import {Routing} from './Routing'
 
 
 // page styling
@@ -61,8 +62,8 @@ const styles = theme => ({
 
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: null ,
       activeTab: '1',
@@ -77,7 +78,12 @@ class App extends Component {
       slideIndex: 0,
       allUsers:[],
       participatelogin:false,
-      signup: false
+      signup: false,
+      user_no_google: null,
+      google: false,
+      user_profile_photo: null,
+      username:null,
+      email:null,
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -187,13 +193,15 @@ class App extends Component {
   */
 
   gmailLogin() {
+    this.setState({google:true})
     auth.signInWithRedirect(provider) 
       .then((result) => {
         const user = result.user;
         this.setState({
           user
         });
-      });
+      })
+
   }
 
 
@@ -204,7 +212,7 @@ class App extends Component {
     firebase.auth().signInWithEmailAndPassword(email, password)
     .then((user)=> {
       user = firebase.auth().user;
-      thisUser.setState({
+      this.setState({
         user
       })
     })
@@ -234,13 +242,21 @@ class App extends Component {
   }
   componentDidMount() {
     let currentComponent = this
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        currentComponent.setState({ user });
-      } 
+    var name, photo, email;
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    user.providerData.forEach(function (profile) {
+      name= profile.displayName;
+      email =  profile.email;
+      photo= profile.photoURL;
     });
-    
-  }    
+    currentComponent.setState({
+      user,
+      username: name,
+    user_profile_photo: photo,
+    email:email
+  })
+}})}
 
   codeGenerator(){
     var s = "";
@@ -265,7 +281,7 @@ class App extends Component {
     //     console.log("usersss are", Object.keys(userss))
     //     this.setState({
     //       allUsers:userss
-    //     })
+    //     })  
     //   })
       
       
@@ -278,6 +294,7 @@ class App extends Component {
     
     const { classes } = this.props;
     const { value } = this.state;
+    const currentComponent = this;
 
   if(!this.state.user && (this.state.submitGC===false)){
     if (this.state.signup === false){
@@ -354,7 +371,7 @@ class App extends Component {
                      {this.state.user?
                     <button style={{width: "100%", backgroundColor:"primary", borderColor:"#black", marginTop: "2%"}} className="btn btn-primary" onClick = {this.logout}> Logout of Google</button>
                       :
-                    <button style={{width: "100%", backgroundColor:"primary", textAlign:"center", color:"primary", borderColor:"black", marginTop: "2%"}} className="btn btn-primary" onClick={this.gmailLogin}> 
+                    <button style={{width: "100%", backgroundColor:"primary", textAlign:"center", color:"primary", borderColor:"black", marginTop: "2%"}} className="btn btn-primary" onClick={this.gmailLogin.bind(this)}> 
                     <img alt = "" src={Google} style={{width:"8%", float:"left", maxWidth:"25px"}} />
                      Join with Google</button>
                      }  
@@ -376,7 +393,7 @@ class App extends Component {
         <p>Enter the shared group code to join the group</p>
         <input onChange={(e)=>this.handleChangeName(e)} style={{color:"white",width: "98%" , backgroundColor:'black'}} type="text" name="Name" placeholder="Your Name" />
         <input onChange={(e)=>this.handleChangeGC(e)} style={{color:"white", width: "98%", backgroundColor:'black'}} type="text" name="GroupCode" placeholder="Group Code" />
-        <button style={{width: "100%", backgroundColor:"primary", borderColor:"black"}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Group</button>
+        {/* <button style={{width: "100%", backgroundColor:"primary", borderColor:"black"}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Group</button> */}
         <div class = "padding2"></div>
         </div>
         </div>
@@ -398,9 +415,9 @@ class App extends Component {
     } 
     else {
       if(this.state.submitGC===false){
-      return (<Home username ={this.username} userInGroup = {this.username}/>)} 
+      return (<Routing email={this.state.email} username ={this.state.username} photoURL = {this.state.user_profile_photo} google={this.state.google}  userInGroup = {this.state.user}/>)} 
       else { 
-        return (<Home username ={this.username} />)
+        return (<Routing email={this.state.email} username ={this.state.username} photoURL = {this.state.user_profile_photo} google={this.state.google} />)
       }
     }
     }

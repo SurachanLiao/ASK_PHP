@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './styles/Home.css';
 import {auth, provider, facebookProvider} from './firebase.js';
 import MainPoker from './MainPoker.jsx';
-import alternate from './images/alternate.png';
-import ReactTooltip from 'react-tooltip'
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
 import { withStyles, StylesProvider } from '@material-ui/core/styles';
@@ -16,16 +14,12 @@ import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import Typography from '@material-ui/core/Typography';
 import SwipeableViews from 'react-swipeable-views';
-import Google from './images/googlefront.jpg';
 import pokerlogo from './images/poker_b.jpeg';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
-import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import GridListTileBar from '@material-ui/core/GridListTileBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import InfoIcon from '@material-ui/icons/Info';
 import razz from './images/cat_razz.png';
 import holdem from './images/texas-holdem-icon.png';
@@ -45,7 +39,6 @@ import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
-import CloseIcon from '@material-ui/icons/Close';
 import Tooltip from '@material-ui/core/Tooltip';
 import Slider from '@material-ui/core/Slider';
 
@@ -170,7 +163,7 @@ const styles = theme => ({
     backgroundColor: "black",
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -193,11 +186,13 @@ const styles = theme => ({
 
 
 
-class Home extends Component {
-  constructor() {
-    super();
+ export class Home extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      user: null ,
+      //user: this.props.user ,
+      //user_no_google: this.props.user_no_google,
+      //googe: this.props.google,
       activeTab: '1',
       GroupCodeInp: null,
       GroupCode:null,
@@ -214,13 +209,15 @@ class Home extends Component {
       renderGameId:0,
       mobileMoreAnchorEl: null,
       dialog:false,
+      userProfil_aseet: 0,
+      userProfil_highestCoin:0,
+      userProfil_win:0,
+      userProfil_lost:0,
+      userProfil_games:0,
+      //user_profile_photo: this.props.photoURL
     }
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.gmailLogin = this.gmailLogin.bind(this);
     this.logout = this.logout.bind(this);
-    this.fblogin = this.fblogin.bind(this);
-    this.login = this.login.bind(this);
   }
 
   handleChange = (event, value) => {
@@ -322,58 +319,17 @@ class Home extends Component {
   -signInWithPopup will trigger a popup gmail login option to sign in with a Google account
   */
 
-  gmailLogin() {
-    auth.signInWithRedirect(provider) 
-      .then((result) => {
-        const user = result.user;
-        this.setState({
-          user
-        });
-      });
-  }
 
 
-  login(){
-    const thisUser = this
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((user)=> {
-      user = firebase.auth().user;
-      thisUser.setState({
-        user
-      })
-    })
-    .catch((error) => {
-      alert("Incorrect email or login.")
-    });
-  }
 
-
-  fblogin(){
-    auth.signInWithRedirect(facebookProvider)
-    .then((result)=> {
-      const user = result.user;
-      this.setState({
-        user
-      });
-    });
-  }
-
-  //event listener for our form
-  handleSubmit(e) {
-    //prevents the page from refreshing
-    e.preventDefault();
-      this.setState({
-      username: ''
-    });
-  }
   displayInfo(tile) {
     alert(tile.info)
   }
 
 
-  
+  updateUserProfile(result){
+    console.log(result)
+  }
   componentDidMount() {
     let currentComponent = this
     auth.onAuthStateChanged((user) => {
@@ -381,7 +337,67 @@ class Home extends Component {
         currentComponent.setState({ user });
       } 
     });
-    console.log(this.state.menubar)
+
+    if(this.props.username){
+      console.log("has user name")
+      var curuser = 
+      {displayName: this.props.username,
+        photoURL: this.props.photoURL
+      }     
+    }else{
+      console.log("has no user name")
+      var curuser = 
+      {displayName: this.props.email,
+        photoURL: null
+      }  
+    }
+    var root = firebase.database();
+    
+      var curuser = 
+      {displayName: this.props.username,
+        photoURL: this.props.photoURL
+      }
+      
+
+ 
+    root.ref("/users").child(curuser.displayName).once("value", function(snapshot){
+    if (snapshot.hasChild(curuser.displayName)){
+      const data = snapshot.val()
+      currentComponent.setState({
+        userProfil_aseet: data.name,
+        userProfil_highestCoin: data.highest_coin_history,
+        userProfil_win: data.win,
+        userProfil_lost: data.lost,
+        userProfil_games: data.games
+      })
+    } else {
+      const ResultsRef = root.ref('users/').child(curuser.displayName)
+          const branch = {
+            name: curuser.displayName,
+            profile: curuser.photoURL,
+            assets: 500,
+            highest_coin_history: 500,
+            win:0,
+            lost:0,
+            total_games:0
+          }
+          ResultsRef.set(branch)
+          console.log("herasae")
+          currentComponent.setState({
+            userProfil_aseet: 500,
+            userProfil_highestCoin: 500,
+            userProfil_win: 0,
+            userProfil_lost: 0,
+            userProfil_games: 0
+          })
+    }
+  })
+  currentComponent.setState({
+    username: curuser.displayName,
+    profile: curuser.photoURL
+  })
+
+
     
   }    
 
@@ -401,18 +417,14 @@ class Home extends Component {
     }
 
 
+
   
   render() {
     
     const { classes } = this.props;
     const { value , mobileMoreAnchorEl} = this.state;
-    
-
-    if(this.state.renderGame === false){
-      return (
-             <div className={classes.root}>
-             {this.state.user ?
-                  <AppBar position="static">
+    const appBar = (
+      <AppBar position="static">
                   <Toolbar>
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                       {/* <MenuIcon /> */}
@@ -433,7 +445,7 @@ class Home extends Component {
                         <Tab className="tab"  label="Profile" icon={<PersonIcon />} />
   
                     </Tabs>
-                    <Avatar src={this.state.user.photoURL} alt = {this.state.user.displayName} 
+                    <Avatar src={this.state.profile} alt = {this.state.username} 
                     className={classes.big}  onClick={(e)=>this.setState({mobileMoreAnchorEl: e.currentTarget})}/>
 
 {/* this menu is shown on when mobileMoreAnchorEl is true */}
@@ -442,8 +454,8 @@ class Home extends Component {
   transformOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted
   open = {Boolean(mobileMoreAnchorEl)}  onClose={()=>this.setState({mobileMoreAnchorEl: null})}>
   {/* display the profile menu item */}
-  <MenuItem > 
-    <IconButton>
+  <MenuItem onclick={()=>this.setState({value:2})}> 
+    <IconButton >
       <AccountCircle />
     </IconButton>
     <p>Profile</p>
@@ -462,25 +474,10 @@ class Home extends Component {
   </Toolbar>
 
 </AppBar>
+    )
 
-                :
-                <div className='text_input'>
-                <h5>Welcome, {this.state.username}!</h5>
-                </div>
-            }     
-
-          <SwipeableViews 
-           backgroundColor = "black"
-            index={this.state.slideIndex}
-            onChangeIndex={this.handleChange}
-          >
-          {/* rendering the first tab of the page with the admin  sign in user journey */}
-          {value === 0 && <TabContainer width='100%' className="tab" backgroundColor = "black">
-          <div style={{textAlign: "center" , backgroundColor :"black"}} className="pt-callout pt-icon-info-sign">
-          <img src={pokerlogo} style={{width:"100%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
-              
-
-            <GridList align="center"
+    const gridlist = (
+      <GridList 
             // cellHeight={180} 
             spacing = {20} className={classes.gridList} backgroundColor = "black" cols={2.5} >
         
@@ -498,6 +495,33 @@ class Home extends Component {
             </GridListTile>
           ))}
         </GridList>
+    )
+      return (
+            <div style={{ flexGrow: 0.1,
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-around',
+            overflow: 'hidden',
+            backgroundColor: "black",}} >
+
+
+             {appBar}
+                  
+
+
+          <SwipeableViews 
+           backgroundColor = "black"
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleChange}
+          >
+          {/* rendering the first tab of the page with the admin  sign in user journey */}
+          {value === 0 && <TabContainer width='100%' className="tab" backgroundColor = "black">
+          <div style={{textAlign: "center" , backgroundColor :"black"}} className="pt-callout pt-icon-info-sign">
+          <img src={pokerlogo} style={{width:"100%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+              
+
+            {gridlist}
 
         <Dialog onClose={()=>this.setState({dialog:false})} aria-labelledby="customized-dialog-title" open={this.state.dialog}>
         <DialogTitle id="customized-dialog-title" onClose={()=>this.setState({dialog:false})}>
@@ -510,7 +534,7 @@ class Home extends Component {
 
 
         <DialogActions>
-          <Button autoFocus onClick={()=>this.setState({dialog:false, renderGame:true})} color="primary">
+          <Button autoFocus onClick={()=>this.props.doneWithHome()} color="primary">
             Start the game
           </Button>
         </DialogActions>
@@ -556,12 +580,12 @@ class Home extends Component {
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
         <br />
         <div style={{color: "white"}}>
-        <h2> {this.state.user.displayName}, 25 </h2>
+        <h2> {this.state.username} </h2>
           <img alt="player-photo" style={{width:"25%", maxWidth:"200px", float:"center", margin:"5%"}} className="photo" src={this.state.user.photoURL} />
-          <h3>Current coin: 500</h3>
-          <h3>Highest coin: 1000</h3>
-          <h3>Win/lost : 50/50</h3>
-          <h3>Total game: 100</h3>
+              <h3>Current coin: {this.state.userProfil_aseet}</h3>
+              <h3>Highest coin: {this.state.userProfil_highestCoin}</h3>
+          <h3>Win/lost : {this.state.userProfil_win} / {this.state.userProfil_lost}</h3>
+          <h3>Total game: {this.state.userProfil_games}</h3>
         </div>
         <br />
         {/* we can create a database for user in firebase with required properties then retrive and show them here {console.log(this.state.user)} */}
@@ -569,6 +593,9 @@ class Home extends Component {
               <div class="padding">
 
               </div>
+              <div class="padding">
+
+            </div>
           </TabContainer>}
 
               </SwipeableViews>
@@ -578,23 +605,15 @@ class Home extends Component {
       <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
             <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
             <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
+            <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div> 
             </div>
+            
       )
-    } else if (this.state.renderGame === true && this.state.renderGameId === 1){
-      return (
-        <MainPoker/>
-        )
-
-  
-    
-    }
-    
+    } 
 } 
 
 
   
-}
 
 // applying the styling to the app page
 Home.propTypes = {
