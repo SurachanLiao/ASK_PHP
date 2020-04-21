@@ -24,16 +24,18 @@ doneWithGame() {
     })
 }
 
+// routing based on states
 render() {
-    let currentComponent = this
     if(!this.state.home) {
-        return (<Home doneWithHome = {this.doneWithHome.bind(this)} google={this.props.google} username = {this.props.username} email = {this.props.email} photoURL = {this.props.photoURL}/>)
+        // render the home component with properties
+        return (<Home doneWithHome = {this.doneWithHome.bind(this)} google={this.props.google} username = {this.props.username} 
+        email = {this.props.email} photoURL = {this.props.photoURL}/>)
     }
     else if(this.state.game === false) {
+        // render the game component with properties
         return (<MainPoker doneWithGame = {this.doneWithGame.bind(this)} username = {this.props.username} photoURL = {this.props.photoURL}/> )
     }
 }
-
 }
 
 export default Routing;
