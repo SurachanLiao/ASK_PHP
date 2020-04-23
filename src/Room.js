@@ -1,7 +1,42 @@
 import React, { Component } from 'react';
 import firebase from './firebase.js';
-import { functions } from 'firebase';
+import './styles/Home.css';
+import decll from './images/dec-ll.png';
+import declr from './images/dec-lr.png';
+import dectr from './images/dec-tr.png';
+import dectl from './images/dec-tl.png'
+import poker_i from './images/poker_i.jpeg'
 
+const styles = theme => ({
+    root: {
+      flexGrow: 0.1,
+      width: '100%',
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: "black",
+    },
+    menuButton: {
+      // marginRight: theme.spacing(2),
+    },
+    title: {
+      flexGrow: 1,
+    },
+    gridList: {
+      width: 500,
+      height: 450,
+      flexWrap: 'nowrap',
+      // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+      transform: 'translateZ(0)',
+    },
+    icon: {
+      color: 'rgba(255, 255, 255, 0.54)',
+    },
+    tab: {
+      width:'100%',
+    }
+})
 export class Room extends Component {
 
     constructor(props) {
@@ -31,7 +66,14 @@ export class Room extends Component {
     }
     render() {
         return (
-<div>
+<div style={{ flexGrow: 0.1,
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: "black",}} >
+        <div style={{color: "white", textAlign: "center"}}>
     This is the room page. Your room number is {this.props.roomCode}
     <button onClick = {()=>this.props.doneWithRoom()} />
     <ul>
@@ -41,6 +83,11 @@ export class Room extends Component {
         )
         })}
     </ul>
+    </div>
+    <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
+            <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
+            <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
+            <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div> 
 </div>
         )
     }
