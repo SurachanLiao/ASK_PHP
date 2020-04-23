@@ -273,20 +273,6 @@ auth.onAuthStateChanged((user) => {
     return s
     }
 
-    // otherUser(){
-    //   //reads firebase to get other user in the group
-    //   root = firebase.database().child(this.state.GroupCodeInp).child("users")
-    //   root.on("value",function(snapshot){
-    //     var userss=snapshot.val()
-    //     console.log("usersss are", Object.keys(userss))
-    //     this.setState({
-    //       allUsers:userss
-    //     })  
-    //   })
-      
-      
-    // }
-
 
 
   
@@ -414,12 +400,10 @@ auth.onAuthStateChanged((user) => {
     }
     } 
     else {
-      if(this.state.submitGC===false){
-      return (<Routing email={this.state.email} username ={this.state.username} photoURL = {this.state.user_profile_photo} google={this.state.google}  userInGroup = {this.state.user}/>)} 
-      else { 
-        return (<Routing email={this.state.email} username ={this.state.username} photoURL = {this.state.user_profile_photo} google={this.state.google} />)
-      }
-    }
+      return (<Routing email={this.state.email} username ={this.state.username} 
+        photoURL = {this.state.user_profile_photo} google={this.state.google}  
+        userInGroup = {this.state.user} roomCode = {this.state.GroupCodeInp}/>)} 
+
     }
 
   

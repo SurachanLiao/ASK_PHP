@@ -215,6 +215,7 @@ const styles = theme => ({
       userProfil_lost:0,
       userProfil_games:0,
       //user_profile_photo: this.props.photoURL
+      updateFB: false,
     }
     this.handleChange = this.handleChange.bind(this);
     this.logout = this.logout.bind(this);
@@ -243,7 +244,22 @@ const styles = theme => ({
       userInGroup: e.target.value
     })
   }
-
+  createRoom(e) {
+    let newCode = this.codeGenerator()
+    let currentComponent = this
+    var root = firebase.database()
+    var ref = root.ref('rooms/').child(newCode+'/users/'+this.props.username)
+    const branch = {
+      assets: currentComponent.state.userProfil_aseet,
+      highest_coin_history: currentComponent.state.userProfil_highestCoin,
+      win:currentComponent.state.userProfil_win,
+      lost:currentComponent.state.userProfil_lost,
+      total_games:currentComponent.state.userProfil_games+1
+    }
+    ref.set(branch)
+    currentComponent.props.setRoomCode(newCode);
+   currentComponent.props.doneWithHomeToRoom();
+  }
   handleSubmitGC (e){
     var currentComponent = this
     //check if the groupcode is valid
@@ -327,10 +343,74 @@ const styles = theme => ({
   }
 
 
-  updateUserProfile(result){
-    console.log(result)
+  updateUserProfile(){
+    let currentComponent = this
+    var curuser = 
+    {displayName: this.props.username,
+      photoURL: this.props.photoURL
+    }
+    console.log("hahaha")
+    var root = firebase.database();
+        const ResultsRef = root.ref('users/').child(curuser.displayName)
+            const branch = {
+              name: curuser.displayName,
+              profile: curuser.photoURL,
+              assets: currentComponent.state.userProfil_aseet,
+              highest_coin_history: currentComponent.state.userProfil_highestCoin,
+              win:currentComponent.state.userProfil_win,
+              lost:currentComponent.state.userProfil_lost,
+              total_games:currentComponent.state.userProfil_games+1
+            }
+            ResultsRef.set(branch)
+            console.log(this.state.userProfil_games)
+      }
+
+
+  getUserProfile(curuser){
+     let currentComponent = this
+    var root = firebase.database();
+    root.ref("/users").child(curuser.displayName).once("value", function(snapshot){
+      const data = snapshot.val() 
+
+      if (data != null){
+        // this is an old user
+        const data = snapshot.val()
+        currentComponent.setState({
+          userProfil_aseet: data.assets,
+          userProfil_highestCoin: data.highest_coin_history,
+          userProfil_win: data.win,
+          userProfil_lost: data.lost,
+          userProfil_games: data.total_games
+        })
+      } else {
+        // this is a newly joined user
+        const ResultsRef = root.ref('users/').child(curuser.displayName)
+            const branch = {
+              name: curuser.displayName,
+              profile: curuser.photoURL,
+              assets: 500,
+              highest_coin_history: 500,
+              win:0,
+              lost:0,
+              total_games:0
+            }
+            ResultsRef.set(branch)
+            currentComponent.setState({
+              userProfil_aseet: 500,
+              userProfil_highestCoin: 500,
+              userProfil_win: 0,
+              userProfil_lost: 0,
+              userProfil_games: 0
+            })
+      }
+    })
   }
   componentDidMount() {
+    var curuser = 
+    {displayName: this.props.username,
+      photoURL: this.props.photoURL
+    }
+
     let currentComponent = this
     auth.onAuthStateChanged((user) => {
       if (user) {
@@ -351,47 +431,14 @@ const styles = theme => ({
         photoURL: null
       }  
     }
-    var root = firebase.database();
+    currentComponent.getUserProfile(curuser)
     
-      var curuser = 
-      {displayName: this.props.username,
-        photoURL: this.props.photoURL
-      }
-      
+    
+    
+    
 
  
-    root.ref("/users").child(curuser.displayName).once("value", function(snapshot){
-    if (snapshot.hasChild(curuser.displayName)){
-      const data = snapshot.val()
-      currentComponent.setState({
-        userProfil_aseet: data.name,
-        userProfil_highestCoin: data.highest_coin_history,
-        userProfil_win: data.win,
-        userProfil_lost: data.lost,
-        userProfil_games: data.games
-      })
-    } else {
-      const ResultsRef = root.ref('users/').child(curuser.displayName)
-          const branch = {
-            name: curuser.displayName,
-            profile: curuser.photoURL,
-            assets: 500,
-            highest_coin_history: 500,
-            win:0,
-            lost:0,
-            total_games:0
-          }
-          ResultsRef.set(branch)
-          console.log("herasae")
-          currentComponent.setState({
-            userProfil_aseet: 500,
-            userProfil_highestCoin: 500,
-            userProfil_win: 0,
-            userProfil_lost: 0,
-            userProfil_games: 0
-          })
-    }
-  })
+    
   currentComponent.setState({
     username: curuser.displayName,
     profile: curuser.photoURL
@@ -401,22 +448,31 @@ const styles = theme => ({
     
   }    
 
+  /* Generate groupcode of length 10, an identifying id used by 
+  different players to log into the same room*/
   codeGenerator(){
     var s = "";
-    //var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+    // randomly generate a string of length 5
     for (var i=0; i<=5; i++) {
     s  += Math.round(Math.random()*10);
-    }
+    } 
+    // check firebase database to see if the code already exists
     var root = firebase.database();
     root.ref("/").once("value", function(snapshot){
       if (snapshot.hasChild(s)){
+        // if it's duplicated, modify the code
         s += Math.round(Math.random()*10);
       }
-    })
+    })  
     return s
     }
 
 
+    doneWithHome(){
+
+      this.updateUserProfile()
+      this.props.doneWithHomeToGame()
+    }
 
   
   render() {
@@ -483,7 +539,7 @@ const styles = theme => ({
         
           {tileData.map((tile) => (
             <GridListTile key={tile.img} >
-              <img src={tile.img} alt={tile.title} onClick={()=>this.setState({dialog:true, renderGameId: tile.id} )}/>
+              <img src={tile.img} alt={tile.title} onClick={()=>this.setState({dialog:true, renderGameId: tile.id})} />
               <GridListTileBar onClick={()=>this.displayInfo(tile)}
                 title={tile.title}
                 actionIcon={
@@ -534,7 +590,7 @@ const styles = theme => ({
 
 
         <DialogActions>
-          <Button autoFocus onClick={()=>this.props.doneWithHome()} color="primary">
+          <Button autoFocus onClick={()=>this.doneWithHome()} color="primary">
             Start the game
           </Button>
         </DialogActions>
@@ -561,13 +617,15 @@ const styles = theme => ({
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
         <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
         <br />
-        <h3>Enter the shared group code to join the group</h3>
+        <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={()=>this.createRoom()}  value="Log In" block> Create a Room</button>
+        <br />
+        <h3>Enter the shared room code to join the room</h3>
         <br />
         
-        <input onChange={(e)=>this.handleChangeGC(e)} style={{width: "98%", backgroundColor : "black"}} type="text" name="GroupCode" placeholder="Group Code" />
+        <input onChange={(e)=>this.handleChangeGC(e)} style={{width: "98%", backgroundColor : "black"}} type="text" name="GroupCode" placeholder="Room Code" />
   
         <br />
-        <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Group</button>
+        <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Room</button>
         </div>
               <div class="padding">
 
