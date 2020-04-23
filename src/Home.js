@@ -216,8 +216,12 @@ const styles = theme => ({
       userProfil_games:0,
       //user_profile_photo: this.props.photoURL
       updateFB: false,
+      FBoutput: null
     }
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeGC = this.handleChangeGC.bind(this);
+    this.handleChangeName = this.handleChangeName.bind(this);
+    this.handleSubmitGC = this.handleSubmitGC.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -260,56 +264,59 @@ const styles = theme => ({
     currentComponent.props.setRoomCode(newCode);
    currentComponent.props.doneWithHomeToRoom();
   }
-  handleSubmitGC (e){
+
+  handleSubmitGC (){
     var currentComponent = this
     //check if the groupcode is valid
-    var ref = firebase.database().ref()
-    var groupcodehere = currentComponent.state.GroupCodeInp
-    var userHere = currentComponent.state.userInGroup
+    var groupcodehere = document.getElementById("roomcode").value;
+    var userHere = document.getElementById("name").value;
+    var invalideCode = false;
+    var duplicateName = false;
     if(!groupcodehere){
-      alert("invalid entry")}
-      else if(this.state.participatelogin===false && userHere==="admin"){
-        alert("invalid entry")
-      }
+      // if the field of room code is empty, alert
+      alert("invalid entry")
+    }
     else{
-    console.log("groupcode hereh is ", groupcodehere)
-    console.log("users here is", userHere)
-    ref.once("value",function(snapshot){
-      console.log("checking child", snapshot.val())
-      if (snapshot.hasChild(groupcodehere)){
-        console.log("groupcode hereh is ", groupcodehere)
-        var output=snapshot.val()
-        console.log("output are ",output)
-        var userss = output[groupcodehere]["users"]
-        var allusers = []
-        for(var k in userss) allusers.push(k)
-        console.log("allusers are",allusers)
-        currentComponent.setState({allUsers:allusers})
-
-        currentComponent.setState({
-          submitGC: true
-        })
-        if(userss[userHere]){
-          console.log("has same name",userHere)
-          alert("someone in the group already has this name, please enter another name");
-          e.preventDefault();
-          document.location.reload();
+      // while the room code is not empty, check if this group exists by checking the database
+      var root = firebase.database();
+      root.ref('rooms/').child(groupcodehere).once("value", function(snapshot){
+        const output = snapshot.val()
+        
+      if (output != null){
+        // this is an a valid groupcode
+        var allUsers = output["users"]
+        currentComponent.props.setRoomCode(groupcodehere);
+        currentComponent.props.doneWithHomeToRoom();
+        if (allUsers[userHere]){
+          duplicateName = true
+        } else {
+          const ResultsRef = root.ref('rooms/').child(groupcodehere+'/users/'+userHere)
+          const branch = {
+            assets: currentComponent.state.userProfil_aseet,
+            highest_coin_history: currentComponent.state.userProfil_highestCoin,
+            win:currentComponent.state.userProfil_win,
+            lost:currentComponent.state.userProfil_lost,
+            total_games:currentComponent.state.userProfil_games+1
+          }
+          ResultsRef.set(branch)
         }
       }
       else{
-        alert("this group doesn't exist yet")
-        e.preventDefault();
-        document.location.reload();
-      }
-    })}
-  }
-
-  handleSubmitName(e){
-    console.log("new user added")
-    this.setState({
-      submitName: e.target.value,
-      participatelogin:true
+        invalideCode = true;
+      }   
     })
+  }
+  if (invalideCode === false && duplicateName === false){
+    currentComponent.props.setRoomCode(groupcodehere);
+    currentComponent.props.doneWithHomeToRoom();
+  } else if (invalideCode === true) {
+    // TODO: now this two conditions are not possible to reach because checking the value of the boolean
+    // inside firebase snapchot is not okay
+    alert("oopsi this room doesn't exist yet")
+  } else {
+    alert("oopsi someone already has the same name in the room")
+  }
+    
   }
 
   //receives inputs from our inputs and updates the corresponding piece of state
@@ -405,7 +412,10 @@ const styles = theme => ({
       }
     })
   }
+
+  
   componentDidMount() {
+    console.log(this.state.GroupCodeInp)
     var curuser = 
     {displayName: this.props.username,
       photoURL: this.props.photoURL
@@ -431,14 +441,7 @@ const styles = theme => ({
         photoURL: null
       }  
     }
-    currentComponent.getUserProfile(curuser)
-    
-    
-    
-    
-
- 
-    
+  currentComponent.getUserProfile(curuser)
   currentComponent.setState({
     username: curuser.displayName,
     profile: curuser.photoURL
@@ -621,11 +624,13 @@ const styles = theme => ({
         <br />
         <h3>Enter the shared room code to join the room</h3>
         <br />
-        
-        <input onChange={(e)=>this.handleChangeGC(e)} style={{width: "98%", backgroundColor : "black"}} type="text" name="GroupCode" placeholder="Room Code" />
+        {/* <input onChange={(e)=>this.handleChangeName(e)} style={{color:"white", width: "98%", backgroundColor : "black"}} id="name" type="text" name="GroupCode" placeholder="Name in Group" />
+        <input onChange={(e)=>this.handleChangeGC(e)} style={{color:"white", width: "98%", backgroundColor : "black"}} type="text" id="roomcode" name="GroupCode" placeholder="Room Code" /> */}
+        <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="text" id= "name" name="name" placeholder="nick name in room" />
+         <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="text" id= "roomcode" name="roomcode" placeholder="room code" />
   
         <br />
-        <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={(e)=>this.handleSubmitGC(e)}  value="Log In" block> Join Room</button>
+        <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={()=>this.handleSubmitGC()}  value="Log In" block> Join Room!!</button>
         </div>
               <div class="padding">
 

@@ -6,6 +6,7 @@ export class Room extends Component {
         return (
 <div>
     This is the room page. Your room number is {this.props.roomCode}
+    <button onClick = {()=>this.props.doneWithRoom()} />
 </div>
         )
     }
