@@ -216,7 +216,8 @@ const styles = theme => ({
       userProfil_games:0,
       //user_profile_photo: this.props.photoURL
       updateFB: false,
-      FBoutput: null
+      invalideCode: false,
+      duplicateName: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeGC = this.handleChangeGC.bind(this);
@@ -270,8 +271,6 @@ const styles = theme => ({
     //check if the groupcode is valid
     var groupcodehere = document.getElementById("roomcode").value;
     var userHere = document.getElementById("name").value;
-    var invalideCode = false;
-    var duplicateName = false;
     if(!groupcodehere){
       // if the field of room code is empty, alert
       alert("invalid entry")
@@ -288,7 +287,9 @@ const styles = theme => ({
         currentComponent.props.setRoomCode(groupcodehere);
         currentComponent.props.doneWithHomeToRoom();
         if (allUsers[userHere]){
-          duplicateName = true
+          currentComponent.setState({
+            duplicateName :true
+          })
         } else {
           const ResultsRef = root.ref('rooms/').child(groupcodehere+'/users/'+userHere)
           const branch = {
@@ -302,14 +303,16 @@ const styles = theme => ({
         }
       }
       else{
-        invalideCode = true;
+        currentComponent.setState({
+          invalideCode :true
+        })
       }   
     })
   }
-  if (invalideCode === false && duplicateName === false){
+  if (currentComponent.state.invalideCode === false && currentComponent.state.duplicateName === false){
     currentComponent.props.setRoomCode(groupcodehere);
     currentComponent.props.doneWithHomeToRoom();
-  } else if (invalideCode === true) {
+  } else if (currentComponent.state.invalideCode === true) {
     // TODO: now this two conditions are not possible to reach because checking the value of the boolean
     // inside firebase snapchot is not okay
     alert("oopsi this room doesn't exist yet")
