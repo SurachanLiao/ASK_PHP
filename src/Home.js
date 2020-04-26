@@ -259,7 +259,8 @@ const styles = theme => ({
       highest_coin_history: currentComponent.state.userProfil_highestCoin,
       win:currentComponent.state.userProfil_win,
       lost:currentComponent.state.userProfil_lost,
-      total_games:currentComponent.state.userProfil_games+1
+      total_games:currentComponent.state.userProfil_games+1,
+      profile: currentComponent.props.photoURL
     }
     ref.set(branch)
     currentComponent.props.setRoomCode(newCode);
@@ -297,7 +298,8 @@ const styles = theme => ({
             highest_coin_history: currentComponent.state.userProfil_highestCoin,
             win:currentComponent.state.userProfil_win,
             lost:currentComponent.state.userProfil_lost,
-            total_games:currentComponent.state.userProfil_games+1
+            total_games:currentComponent.state.userProfil_games+1,
+            profile:currentComponent.props.photoURL
           }
           ResultsRef.set(branch)
         }
@@ -359,7 +361,6 @@ const styles = theme => ({
     {displayName: this.props.username,
       photoURL: this.props.photoURL
     }
-    console.log("hahaha")
     var root = firebase.database();
         const ResultsRef = root.ref('users/').child(curuser.displayName)
             const branch = {
@@ -618,7 +619,7 @@ const styles = theme => ({
 </div>
           </TabContainer>}
          {/* rendering the second tab of the page with the group code user journey */}
-          {value === 1 && <TabContainer className="tab" backgroundColor = 'black'>
+          {value === 1 && <TabContainer backgroundColor = 'black'>
             <form onSubmit={this.handleSubmit}>
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
         <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
