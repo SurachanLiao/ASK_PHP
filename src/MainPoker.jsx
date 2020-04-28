@@ -147,7 +147,7 @@ class MainPoker extends Component {
         loading: false,
       })
     });
-    imageLoaderRequest.open("GET", "./assets/table-nobg-svg-01.svg");
+    imageLoaderRequest.open("GET", "./assets/table.svg");
     imageLoaderRequest.send();
 
     this.setState(prevState => ({
@@ -422,7 +422,7 @@ class MainPoker extends Component {
       <div className='poker-app--background'>
         <div ref={this.tableRef} className="poker-table--container">
         <TABLE_CENTER_MARKER ref={this.tableCenterMarker}/>
-          <img className="poker-table--table-image" src={"./assets/table-nobg-svg-01.svg"} alt="Poker Table" />
+          <img className="poker-table--table-image" src={"./assets/table.svg"} alt="Poker Table" />
           {players.map((player, arrayIndex) => {
               return <PlayerNew
                 key={arrayIndex}  
