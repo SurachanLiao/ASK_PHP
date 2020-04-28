@@ -460,7 +460,10 @@ class MainPoker extends Component {
     return (
       <div className="App">
         <div className='poker-table--wrapper'> 
-        <Menubar doneWithGame = {this.props.doneWithGame.bind(this)} />
+        <Menubar doneWithGame = {this.props.doneWithGame.bind(this)} 
+        user_lost = {this.props.user_lost} user_win = {this.props.user_win}
+        user_currentCoin = {this.props.user_currentCoin} user_highestCoin = {this.props.user_highestCoin}
+        user_games = {this.props.user_games}/>
           { 
             (this.state.loading) ? <Spinner/> : 
             (this.state.winnerFound) ? <WinScreen /> : 

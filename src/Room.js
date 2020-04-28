@@ -13,9 +13,15 @@ import GridListTileBar from '@material-ui/core/GridListTileBar';
 import InfoIcon from '@material-ui/icons/Info';
 import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import { withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { purple } from '@material-ui/core/colors';
+import Typography from '@material-ui/core/Typography';
+import Menubar from './Appbar.js';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 const styles = theme => ({
     root: {
       flexGrow: 0.1,
@@ -48,6 +54,15 @@ const styles = theme => ({
       margin: theme.spacing(1),
     },
 })
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography color="white" variant="h6">{children}</Typography>
+    </MuiDialogTitle>
+  );
+});
 export class Room extends Component {
 
     constructor(props) {
@@ -55,7 +70,9 @@ export class Room extends Component {
         this.state = {
             username: this.props.username,
             profile: this.props.photoURL,
-          users: []
+          users: [],
+          dialog: false,
+          curUser: 0,
         }
 
       }
@@ -65,18 +82,25 @@ export class Room extends Component {
         root.ref('/rooms').child(this.props.roomCode+'/users').on("value", function(snapshot){
             const users = snapshot.val()
             let newState = [];
+            let cid = 0
             for (let user in users) {
             newState.push({
+                id: cid,
                 name: user,
-                profile: users[user].profile
+                profile: users[user].profile, 
+                win: users[user].win,
+                highestcoin: users[user].highest_coin_history,
+                lost: users[user].lost,
+                total: users[user].total_games,
             });
+            cid += 1
             }
-            console.log(newState)
             currentComponent.setState({
                 users: newState
             })
         })
     }
+
     render() {
       
       const { classes } = this.props;
@@ -97,14 +121,21 @@ export class Room extends Component {
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: "black",}} >
+          <div class="bottomleft"><img src={decll} alt="" style={{maxWidth:"150px"}}></img></div>
+            <div class="bottomright"><img src={declr} alt="" style={{maxWidth:"150px"}}></img></div>
+            <div class="topright"><img src={dectr} alt="" style={{maxWidth:"150px"}}></img></div>
+            <div class="topleft"><img src={dectl} alt="" style={{ maxWidth:"150px"}}></img></div> 
       <div styles={{      
         position: 'absolute',
 
       width:"50%",
       maxWidth:"100px",  
       centering: true}}>
-
-      <img src={logoloading} style = {{      
+        <Menubar toHome = {true} doneWithRoomToHome = {this.props.doneWithRoomToHome.bind(this)} 
+        user_lost = {this.props.user_lost} user_win = {this.props.user_win}
+        user_currentCoin = {this.props.user_currentCoin} user_highestCoin = {this.props.user_highestCoin}
+        user_games = {this.props.user_games}/>
+      <img src={logoloading} alt="poker" style = {{      
       position: 'relative',
         display: 'block',
         marginleft: 'auto',
@@ -119,7 +150,7 @@ export class Room extends Component {
     Your room number is {this.props.roomCode}
     </div>
     <div style={{color: "white", textAlign: "center"}}>
-    <ColorButton onClick = {()=>this.props.doneWithRoom()}
+    <ColorButton onClick = {()=>this.props.doneWithRoomToGame()}
         variant="contained"
         color= '#9900ff'
         className={classes.button}
@@ -131,15 +162,14 @@ export class Room extends Component {
     </div>
       
     <ul className = {classes.root}>
-    {/* {this.state.users.map((user) => {
-        return ( */}
 
       <GridList
       spacing = {20} className={classes.gridList} backgroundColor = "black" cols={4} >
    {this.state.users.map((user) => (
+     <div>
       <GridListTile key={user.profile}>
       <img src={user.profile} alt={user.name} />
-      <GridListTileBar
+      <GridListTileBar onClick={()=>this.setState({dialog: true, curUser: user.id})}
         title={user.name}
         actionIcon={
           <IconButton aria-label={`info about ${user.name}`} className={classes.icon}>
@@ -148,14 +178,29 @@ export class Room extends Component {
         }
       />
     </GridListTile>
+    
+    <Dialog  onClose={()=>this.setState({dialog:false })} aria-labelledby="customized-dialog-title" open={this.state.dialog && this.state.curUser === user.id}>
+
+      <DialogTitle style={{color: 'white', backgroundColor: purple[500]}} id="customized-dialog-title" onClose={()=>this.setState({dialog:false })}>
+        {user.name}
+      </DialogTitle>
+      <DialogContent>
+          <DialogContentText>
+            current id: {user.id} 
+            </DialogContentText>
+            <DialogContentText>
+            number of games played: {user.total}
+            </DialogContentText>
+            <DialogContentText>
+            win / lose: {user.win} / {user.lost}
+          </DialogContentText>
+        </DialogContent>     
+    </Dialog>
+          </div>
           )
         )}
   </GridList>
     </ul>
-    <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
-            <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div> 
 </div>
         )
     }

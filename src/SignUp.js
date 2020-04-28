@@ -81,7 +81,7 @@ class SignUp extends Component {
             <div className = {classes.root}>
             <div style={loginStyles}> 
             <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-            <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+            <img src={pokerlogo} alt="" style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
         {/*sign up form to create a new account*/}
         <form>
             <input style={{color:"white", width: "98%" ,backgroundColor:"black"}} type="text" id= "email" name="email" placeholder="Enter Email" />
@@ -90,10 +90,10 @@ class SignUp extends Component {
             <button style={{width: "100%", borderColor:"black", marginTop: "2%"}} type="submit" className="btn btn-primary" bsStyle="" value="Log In" onClick={this.login} block> Create Account</button>
                 
         </form>
-        <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
-              <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
-              <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
-              <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
+        <div class="bottomleft"><img src={decll} alt="" style={{maxWidth:"150px"}}></img></div>
+              <div class="bottomright"><img src={declr} alt="" style={{maxWidth:"150px"}}></img></div>
+              <div class="topright"><img src={dectr} alt="" style={{maxWidth:"150px"}}></img></div>
+              <div class="topleft"><img src={dectl} alt="" style={{ maxWidth:"150px"}}></img></div>
                 <div className = "padding2"></div>
         </div>
         </div> 

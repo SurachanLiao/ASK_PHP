@@ -4,17 +4,16 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import firebase from 'firebase';
-import {auth, provider, facebookProvider} from './firebase.js';
+import {auth} from './firebase.js';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
-
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import { withStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +26,25 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
+const styles = theme => ({
+  root: {
+    flexGrow: 0.1,
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: "black",
+  }})
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography color="white" variant="h6">{children}</Typography>
+    </MuiDialogTitle>
+  );
+});
 
 function logout() {
     console.log("logging out")
@@ -41,13 +59,11 @@ function logout() {
 
 export default function MenuAppBar(props) {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  const [auth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [profile, setProfile] = React.useState(null);
   const open = Boolean(anchorEl);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,12 +73,22 @@ export default function MenuAppBar(props) {
     setAnchorEl(null);
   };
 
+  const handleProfile = (event) => {
+    setProfile(event.currentTarget);
+  };
+
+  const handleCloseProfile = () => {
+    setProfile(null);
+  };
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            {props.toHome?
+            <KeyboardReturnIcon onClick = {()=>props.doneWithRoomToHome()} />:
             <KeyboardReturnIcon onClick = {()=>props.doneWithGame()} />
+            }
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             
@@ -93,12 +119,31 @@ export default function MenuAppBar(props) {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
                 <MenuItem onClick={logout}>Log Out</MenuItem>
               </Menu>
             </div>
           )}
         </Toolbar>
+        <Dialog  onClose={handleCloseProfile} aria-labelledby="customized-dialog-title" open={profile }>
+
+        <DialogTitle style={{color: 'white', backgroundColor: '#333399'}} id="customized-dialog-title" onClose={handleCloseProfile}>
+        </DialogTitle>
+        <DialogContent>
+            <DialogContentText>
+            assets: {props.user_currentCoin}
+            </DialogContentText>
+            <DialogContentText>
+            number of games played: {props.user_games}
+            </DialogContentText>
+            <DialogContentText>
+            win / lose: {props.user_win} / {props.user_lost}
+            </DialogContentText>
+            <DialogContentText>
+            most assets in the history: {props.user_highestCoin}
+            </DialogContentText>
+          </DialogContent>     
+        </Dialog>
       </AppBar>
     </div>
   );

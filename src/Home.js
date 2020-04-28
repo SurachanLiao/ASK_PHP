@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import './styles/Home.css';
-import {auth, provider, facebookProvider} from './firebase.js';
-import MainPoker from './MainPoker.jsx';
+import {auth} from './firebase.js';
 import firebase from 'firebase';
 import PropTypes from 'prop-types';
-import { withStyles, StylesProvider } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -36,13 +35,46 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Tooltip from '@material-ui/core/Tooltip';
 import Slider from '@material-ui/core/Slider';
 
 // page styling
+// theme styling
+const styles = theme => ({
+  root: {
+    flexGrow: 0.1,
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    overflow: 'hidden',
+    backgroundColor: "black",
+  },
+  menuButton: {
+    // marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  gridList: {
+    width: 800,
+    height: 450,
+    flexWrap: 'nowrap',
+    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
+    transform: 'translateZ(0)',
+  },
+  icon: {
+    color: 'rgba(255, 255, 255, 0.54)',
+  },
+  tab: {
+    width:'100%',
+  }
+
+});
 
 const tileData = [
   {
@@ -138,11 +170,6 @@ function ValueLabelComponent(props) {
   );
 }
 
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
 
 const DialogActions = withStyles((theme) => ({
   root: {
@@ -150,39 +177,6 @@ const DialogActions = withStyles((theme) => ({
     padding: theme.spacing(1),
   },
 }))(MuiDialogActions);
-
-// theme styling
-const styles = theme => ({
-  root: {
-    flexGrow: 0.1,
-    width: '100%',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: "black",
-  },
-  menuButton: {
-    // marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  gridList: {
-    width: 500,
-    height: 450,
-    flexWrap: 'nowrap',
-    // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-    transform: 'translateZ(0)',
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
-  tab: {
-    width:'100%',
-  }
-
-});
 
 
 
@@ -214,10 +208,10 @@ const styles = theme => ({
       userProfil_win:0,
       userProfil_lost:0,
       userProfil_games:0,
-      //user_profile_photo: this.props.photoURL
       updateFB: false,
       invalideCode: false,
-      duplicateName: false
+      duplicateName: false,
+      profile: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeGC = this.handleChangeGC.bind(this);
@@ -374,6 +368,11 @@ const styles = theme => ({
             }
             ResultsRef.set(branch)
             console.log(this.state.userProfil_games)
+            currentComponent.props.setUserGames(currentComponent.state.userProfil_games)
+            currentComponent.props.setUserLost(currentComponent.state.userProfil_lost)
+            currentComponent.props.setUserWin(currentComponent.state.userProfil_win)
+            currentComponent.props.setUserHighestCoins(currentComponent.state.userProfil_highestCoin)
+            currentComponent.props.setUserCurrentCoins(currentComponent.state.userProfil_aseet)
       }
 
 
@@ -414,6 +413,11 @@ const styles = theme => ({
               userProfil_games: 0
             })
       }
+      currentComponent.props.setUserGames(currentComponent.state.userProfil_games)
+      currentComponent.props.setUserLost(currentComponent.state.userProfil_lost)
+      currentComponent.props.setUserWin(currentComponent.state.userProfil_win)
+      currentComponent.props.setUserHighestCoins(currentComponent.state.userProfil_highestCoin)
+      currentComponent.props.setUserCurrentCoins(currentComponent.state.userProfil_aseet)
     })
   }
 
@@ -434,13 +438,13 @@ const styles = theme => ({
 
     if(this.props.username){
       console.log("has user name")
-      var curuser = 
+       curuser = 
       {displayName: this.props.username,
         photoURL: this.props.photoURL
       }     
     }else{
       console.log("has no user name")
-      var curuser = 
+       curuser = 
       {displayName: this.props.email,
         photoURL: null
       }  
@@ -517,7 +521,7 @@ const styles = theme => ({
   transformOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted
   open = {Boolean(mobileMoreAnchorEl)}  onClose={()=>this.setState({mobileMoreAnchorEl: null})}>
   {/* display the profile menu item */}
-  <MenuItem onclick={()=>this.setState({value:2})}> 
+  <MenuItem onClick={()=>this.setState({profile:true})}> 
     <IconButton >
       <AccountCircle />
     </IconButton>
@@ -531,10 +535,27 @@ const styles = theme => ({
     <p>Log Out</p>
   </MenuItem>
 </Menu>
-
-
-
   </Toolbar>
+  <Dialog  onClose={()=>this.setState({profile:false })} aria-labelledby="customized-dialog-title" open={this.state.profile }>
+
+<DialogTitle style={{color: 'white', backgroundColor: '#333399'}} id="customized-dialog-title" onClose={()=>this.setState({dialog:false })}>
+      {this.props.username}
+</DialogTitle>
+<DialogContent>
+    <DialogContentText>
+    assets: {this.state.userProfil_aseet}
+    </DialogContentText>
+    <DialogContentText>
+    number of games played: {this.state.userProfil_games}
+    </DialogContentText>
+    <DialogContentText>
+    win / lose: {this.state.userProfil_win} / {this.state.userProfil_lost}
+    </DialogContentText>
+    <DialogContentText>
+    most assets in the history: {this.state.userProfil_highestCoin}
+    </DialogContentText>
+  </DialogContent>     
+</Dialog>
 
 </AppBar>
     )
@@ -542,7 +563,7 @@ const styles = theme => ({
     const gridlist = (
       <GridList 
             // cellHeight={180} 
-            spacing = {20} className={classes.gridList} backgroundColor = "black" cols={2.5} >
+            spacing = {20} className={classes.gridList} backgroundColor = "black" cols={4} >
         
           {tileData.map((tile) => (
             <GridListTile key={tile.img} >
@@ -581,13 +602,13 @@ const styles = theme => ({
           {/* rendering the first tab of the page with the admin  sign in user journey */}
           {value === 0 && <TabContainer width='100%' className="tab" backgroundColor = "black">
           <div style={{textAlign: "center" , backgroundColor :"black"}} className="pt-callout pt-icon-info-sign">
-          <img src={pokerlogo} style={{width:"100%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+          <img src={pokerlogo} alt="" style={{width:"100%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
               
 
             {gridlist}
 
         <Dialog onClose={()=>this.setState({dialog:false})} aria-labelledby="customized-dialog-title" open={this.state.dialog}>
-        <DialogTitle id="customized-dialog-title" onClose={()=>this.setState({dialog:false})}>
+        <DialogTitle style = {{color: 'white', backgroundColor:'#333399'}}id="customized-dialog-title" onClose={()=>this.setState({dialog:false})}>
           How much do you want to start with?
         </DialogTitle>
                 
@@ -622,14 +643,12 @@ const styles = theme => ({
           {value === 1 && <TabContainer backgroundColor = 'black'>
             <form onSubmit={this.handleSubmit}>
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-        <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+        <img src={pokerlogo} alt="" style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
         <br />
         <button style={{width: "100%",  borderColor:'black'}} type="submit" className="btn btn-primary" onClick={()=>this.createRoom()}  value="Log In" block> Create a Room</button>
         <br />
         <h3>Enter the shared room code to join the room</h3>
         <br />
-        {/* <input onChange={(e)=>this.handleChangeName(e)} style={{color:"white", width: "98%", backgroundColor : "black"}} id="name" type="text" name="GroupCode" placeholder="Name in Group" />
-        <input onChange={(e)=>this.handleChangeGC(e)} style={{color:"white", width: "98%", backgroundColor : "black"}} type="text" id="roomcode" name="GroupCode" placeholder="Room Code" /> */}
         <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="text" id= "name" name="name" placeholder="nick name in room" />
          <input style={{color:"white", width: "98%",backgroundColor:"black"}} type="text" id= "roomcode" name="roomcode" placeholder="room code" />
   
@@ -648,7 +667,7 @@ const styles = theme => ({
         <br />
         <div style={{color: "white"}}>
         <h2> {this.state.username} </h2>
-          <img alt="player-photo" style={{width:"25%", maxWidth:"200px", float:"center", margin:"5%"}} className="photo" src={this.state.user.photoURL} />
+          <img  alt="" style={{width:"25%", maxWidth:"200px", float:"center", margin:"5%"}} className="photo" src={this.state.user.photoURL} />
               <h3>Current coin: {this.state.userProfil_aseet}</h3>
               <h3>Highest coin: {this.state.userProfil_highestCoin}</h3>
           <h3>Win/lost : {this.state.userProfil_win} / {this.state.userProfil_lost}</h3>
@@ -669,10 +688,10 @@ const styles = theme => ({
               
       
     
-      <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
-            <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
-            <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div> 
+      <div class="bottomleft"><img src={decll} alt="" style={{maxWidth:"150px"}}></img></div>
+            <div class="bottomright"><img src={declr} alt="" style={{maxWidth:"150px"}}></img></div>
+            <div class="topright"><img src={dectr} alt="" style={{maxWidth:"150px"}}></img></div>
+            <div class="topleft"><img src={dectl} alt="" style={{ maxWidth:"150px"}}></img></div> 
             </div>
             
       )

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './styles/App.css';
 import {auth, provider, facebookProvider} from './firebase.js';
 import SignUp from './SignUp'
-import Home from './Home'
-import MainPoker from './MainPoker.jsx';
 import alternate from './images/alternate.png';
 import ReactTooltip from 'react-tooltip'
 import firebase from 'firebase';
@@ -13,7 +11,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import HomeIcon from '@material-ui/icons/Home';
-import TimeIcon from '@material-ui/icons/Timer';
 import GroupIcon from '@material-ui/icons/Group';
 import Typography from '@material-ui/core/Typography';
 import SwipeableViews from 'react-swipeable-views';
@@ -206,7 +203,6 @@ class App extends Component {
 
 
   login(){
-    const thisUser = this
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -280,7 +276,6 @@ auth.onAuthStateChanged((user) => {
     
     const { classes } = this.props;
     const { value } = this.state;
-    const currentComponent = this;
 
   if(!this.state.user && (this.state.submitGC===false)){
     if (this.state.signup === false){
@@ -318,7 +313,7 @@ auth.onAuthStateChanged((user) => {
                 }*/}
           <div style={loginStyles}> 
           <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-          <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+          <img src={pokerlogo} alt="" style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
               
               {this.state.user ?
                 <div>
@@ -374,7 +369,7 @@ auth.onAuthStateChanged((user) => {
             <form onSubmit={this.handleSubmit}>
         <div style={loginStyles}>  
         <div style={{textAlign: "center"}} className="pt-callout pt-icon-info-sign">
-        <img src={pokerlogo} style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
+        <img src={pokerlogo} alt="" style={{width:"80%", maxWidth:"500px", float:"center", margin:"5%"}} className="pt-callout pt-icon-info-sign"/>
         <h5>Welcome to Poker!</h5>
         <p>Enter the shared group code to join the group</p>
         <input onChange={(e)=>this.handleChangeName(e)} style={{color:"white",width: "98%" , backgroundColor:'black'}} type="text" name="Name" placeholder="Your Name" />
@@ -388,10 +383,10 @@ auth.onAuthStateChanged((user) => {
           </TabContainer>}
   
               </SwipeableViews>
-              <div class="bottomleft"><img src={decll} style={{maxWidth:"150px"}}></img></div>
-              <div class="bottomright"><img src={declr} style={{maxWidth:"150px"}}></img></div>
-              <div class="topright"><img src={dectr} style={{maxWidth:"150px"}}></img></div>
-              <div class="topleft"><img src={dectl} style={{ maxWidth:"150px"}}></img></div>
+              <div class="bottomleft"><img src={decll} alt="" style={{maxWidth:"150px"}}></img></div>
+              <div class="bottomright"><img src={declr} alt="" style={{maxWidth:"150px"}}></img></div>
+              <div class="topright"><img src={dectr} alt="" style={{maxWidth:"150px"}}></img></div>
+              <div class="topleft"><img src={dectl} alt="" style={{ maxWidth:"150px"}}></img></div>
       </div>
   
       )
