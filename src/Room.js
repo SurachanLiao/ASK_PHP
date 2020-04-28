@@ -76,7 +76,6 @@ export class Room extends Component {
 
       }
     componentDidMount(){
-
       // listen to the change in firebase database, if new user join, add new user to the state of users
         var currentComponent = this;
         var root = firebase.database();

@@ -218,9 +218,9 @@ const DialogActions = withStyles((theme) => ({
 
 
   
-  // create a new room by setting a new folder in firebase
-  createRoom(e) {
-    let newCode = this.codeGenerator()
+  /* create a new room by setting a new directory in firebase database */
+  createRoom() {
+    let newCode = this.codeGenerator()  // generate random room code
     let currentComponent = this
     var root = firebase.database()
     var ref = root.ref('rooms/').child(newCode+'/users/'+this.props.username)
@@ -228,14 +228,14 @@ const DialogActions = withStyles((theme) => ({
       // each user in the room will have the following data
       assets: currentComponent.state.userProfil_aseet,
       highest_coin_history: currentComponent.state.userProfil_highestCoin,
-      win:currentComponent.state.userProfil_win,
-      lost:currentComponent.state.userProfil_lost,
-      total_games:currentComponent.state.userProfil_games+1,
+      win: currentComponent.state.userProfil_win,
+      lost: currentComponent.state.userProfil_lost,
+      total_games: currentComponent.state.userProfil_games+1,
       profile: currentComponent.props.photoURL
     }
-    ref.set(branch)
-    currentComponent.props.setRoomCode(newCode);
-   currentComponent.props.doneWithHomeToRoom();
+    ref.set(branch) // setting the directory in firebase
+    currentComponent.props.setRoomCode(newCode); // update room code in router.js
+    currentComponent.props.doneWithHomeToRoom();  // routes to room
   }
 
   // add the user to a room
