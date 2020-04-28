@@ -1,6 +1,6 @@
-# Poker
+# Poker: ASK_PHP
 This is a game of poker. Currently it supports single person playing Texas Hold'em with computers, and multiple people loging in into a same room. In the future, it will support multiple people play Texas Hold'em, and hopefully more signle player/multiplayers poker games.
-
+This project is named after the initial authors.
 ## Examples
 ### single person Texas Hold'em
 ![demo1.gif](demo1.gif)

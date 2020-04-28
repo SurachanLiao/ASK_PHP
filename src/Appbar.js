@@ -85,6 +85,7 @@ export default function MenuAppBar(props) {
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            {/* depends on who is Appbar's parent, go back routes to different components */}
             {props.toHome?
             <KeyboardReturnIcon onClick = {()=>props.doneWithRoomToHome()} />:
             <KeyboardReturnIcon onClick = {()=>props.doneWithGame()} />

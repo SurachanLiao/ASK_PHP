@@ -55,7 +55,7 @@ const styles = theme => ({
     backgroundColor: "black",
   },
   menuButton: {
-    // marginRight: theme.spacing(2),
+     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -76,6 +76,7 @@ const styles = theme => ({
 
 });
 
+// data about the single player games
 const tileData = [
   {
     img: holdem,
@@ -98,10 +99,10 @@ const tileData = [
     id:3
   },
   {
-      img: razz,
-      title: 'razz',
-      info: '',
-      id:4
+    img: razz,
+    title: 'razz',
+    info: '',
+    id:4
     },
 ];
 
@@ -152,6 +153,8 @@ ValueLabelComponent.propTypes = {
   open: PropTypes.bool.isRequired,
   value: PropTypes.number.isRequired,
 };
+
+// customize a dialogTitle component based on MuiDiagTitle and Typography
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
   return (
@@ -160,6 +163,7 @@ const DialogTitle = withStyles(styles)((props) => {
     </MuiDialogTitle>
   );
 });
+
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
 
@@ -184,71 +188,44 @@ const DialogActions = withStyles((theme) => ({
   constructor(props) {
     super(props);
     this.state = {
-      //user: this.props.user ,
-      //user_no_google: this.props.user_no_google,
-      //googe: this.props.google,
-      activeTab: '1',
-      GroupCodeInp: null,
-      GroupCode:null,
-      submitGC: false,
-      userInGroup: null,
-      submitName:false,
-      displayResult:false,
-      rotationState: 0,
+      activeTab: '1', // index to keep track of which tab is opened
+      GroupCodeInp: null,  // the room code provided by the user
       value: 0,
-      slideIndex: 0,
-      allUsers:[],
-      participatelogin:false,
-      renderGame:false,
-      renderGameId:0,
-      mobileMoreAnchorEl: null,
-      dialog:false,
-      userProfil_aseet: 0,
-      userProfil_highestCoin:0,
-      userProfil_win:0,
-      userProfil_lost:0,
-      userProfil_games:0,
-      updateFB: false,
-      invalideCode: false,
-      duplicateName: false,
-      profile: false
+      slideIndex: 0, // index to keep track of slide index in tabs
+      renderGame:false, // if true, render the selected game
+      renderGameId:0, // which game to render
+      mobileMoreAnchorEl: null, // if true, display menu (profile and log out), otherwise null
+      dialog:false, // if true, display dialog
+      userProfil_aseet: 0, // user information: how many current asset does the user holds
+      userProfil_highestCoin:0, // user information: how many asset has the user held the most
+      userProfil_win:0, // user information: how many games has the user win
+      userProfil_lost:0, // user information: how many games has the user lost
+      userProfil_games:0, // user information: how many games has the user played
+      invalideCode: false, // user joining room: if true, the code of the room is invalid
+      duplicateName: false, // user joining room: if true, there has already existed someont with the same name in the room
+      profile: false // if true, display user profile as a dialog
     }
     this.handleChange = this.handleChange.bind(this);
-    this.handleChangeGC = this.handleChangeGC.bind(this);
-    this.handleChangeName = this.handleChangeName.bind(this);
     this.handleSubmitGC = this.handleSubmitGC.bind(this);
     this.logout = this.logout.bind(this);
   }
 
+  // which tab(out of home, rooms, profile) to view
   handleChange = (event, value) => {
     this.setState({ value ,
       slideIndex: value,});
   };
 
-  toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
-    }
-  }
+
   
-  handleChangeGC (e){
-    this.setState({
-      GroupCodeInp: e.target.value
-    })
-  }
-  handleChangeName(e){
-    this.setState({
-      userInGroup: e.target.value
-    })
-  }
+  // create a new room by setting a new folder in firebase
   createRoom(e) {
     let newCode = this.codeGenerator()
     let currentComponent = this
     var root = firebase.database()
     var ref = root.ref('rooms/').child(newCode+'/users/'+this.props.username)
     const branch = {
+      // each user in the room will have the following data
       assets: currentComponent.state.userProfil_aseet,
       highest_coin_history: currentComponent.state.userProfil_highestCoin,
       win:currentComponent.state.userProfil_win,
@@ -261,6 +238,7 @@ const DialogActions = withStyles((theme) => ({
    currentComponent.props.doneWithHomeToRoom();
   }
 
+  // add the user to a room
   handleSubmitGC (){
     var currentComponent = this
     //check if the groupcode is valid
@@ -337,18 +315,16 @@ const DialogActions = withStyles((theme) => ({
     document.location.reload();
   }
 
-  /*
-  -signInWithPopup will trigger a popup gmail login option to sign in with a Google account
-  */
 
 
-
-
+  // display the selected game information using alert
+  // TODO: display the information using a dialog
   displayInfo(tile) {
     alert(tile.info)
   }
 
-
+  // this is called after the user selects a game to play, therefore, append 1 to the number of games user has played
+  // and update firebase database
   updateUserProfile(){
     let currentComponent = this
     var curuser = 
@@ -375,7 +351,7 @@ const DialogActions = withStyles((theme) => ({
             currentComponent.props.setUserCurrentCoins(currentComponent.state.userProfil_aseet)
       }
 
-
+  // this is called right after user authentication is passed. We obtain the user information from firebase database
   getUserProfile(curuser){
      let currentComponent = this
     var root = firebase.database();
@@ -383,7 +359,7 @@ const DialogActions = withStyles((theme) => ({
       const data = snapshot.val() 
 
       if (data != null){
-        // this is an old user
+        // this is an old user, retrieve data from database
         const data = snapshot.val()
         currentComponent.setState({
           userProfil_aseet: data.assets,
@@ -393,7 +369,7 @@ const DialogActions = withStyles((theme) => ({
           userProfil_games: data.total_games
         })
       } else {
-        // this is a newly joined user
+        // this is a newly joined user, assign new data to the user and update database
         const ResultsRef = root.ref('users/').child(curuser.displayName)
             const branch = {
               name: curuser.displayName,
@@ -413,6 +389,7 @@ const DialogActions = withStyles((theme) => ({
               userProfil_games: 0
             })
       }
+      // send this information back to router so other components can share this information
       currentComponent.props.setUserGames(currentComponent.state.userProfil_games)
       currentComponent.props.setUserLost(currentComponent.state.userProfil_lost)
       currentComponent.props.setUserWin(currentComponent.state.userProfil_win)
@@ -423,7 +400,6 @@ const DialogActions = withStyles((theme) => ({
 
   
   componentDidMount() {
-    console.log(this.state.GroupCodeInp)
     var curuser = 
     {displayName: this.props.username,
       photoURL: this.props.photoURL
@@ -435,27 +411,20 @@ const DialogActions = withStyles((theme) => ({
         currentComponent.setState({ user });
       } 
     });
-
+    // if logging in not using google, will not have username
     if(this.props.username){
-      console.log("has user name")
        curuser = 
       {displayName: this.props.username,
         photoURL: this.props.photoURL
       }     
     }else{
-      console.log("has no user name")
+      // thus, use the email address and set profile to null
        curuser = 
       {displayName: this.props.email,
         photoURL: null
       }  
     }
   currentComponent.getUserProfile(curuser)
-  currentComponent.setState({
-    username: curuser.displayName,
-    profile: curuser.photoURL
-  })
-
-
     
   }    
 
@@ -478,7 +447,8 @@ const DialogActions = withStyles((theme) => ({
     return s
     }
 
-
+    // this method first update the user information by adding 1 to the number of games played,
+    // and then route to game
     doneWithHome(){
 
       this.updateUserProfile()
@@ -492,78 +462,75 @@ const DialogActions = withStyles((theme) => ({
     const { value , mobileMoreAnchorEl} = this.state;
     const appBar = (
       <AppBar position="static">
-                  <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                      {/* <MenuIcon /> */}
-                    </IconButton>
-                    <Avatar src={poker_i}  className={classes.big}/>
-                    <Tabs className = {classes.title}
-                        onChange={this.handleChange}
-                        // scrollable
-                        //scrollButtons="on"
-                        indicatorColor="white"
-                        textColor="white"
-                        value={this.state.slideIndex}
-                        centered = 'true'
-                        boxShadow="none"
-                      >
-                        <Tab centered className="tab" label="Home" icon={<HomeIcon />} />
-                        <Tab centered className="tab"  label="Groups" icon={<GroupIcon />} />
-                        <Tab className="tab"  label="Profile" icon={<PersonIcon />} />
-  
-                    </Tabs>
-                    <Avatar src={this.state.profile} alt = {this.state.username} 
-                    className={classes.big}  onClick={(e)=>this.setState({mobileMoreAnchorEl: e.currentTarget})}/>
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          </IconButton>
+          <Avatar src={poker_i}  className={classes.big}/>
+          <Tabs className = {classes.title}
+              onChange={this.handleChange}
+              // scrollable
+              //scrollButtons="on"
+              indicatorColor="white"
+              textColor="white"
+              value={this.state.slideIndex}
+              centered = 'true'
+              boxShadow="none"
+            >
+          <Tab centered className="tab" label="Home" icon={<HomeIcon />} />
+          <Tab centered className="tab"  label="Room" icon={<GroupIcon />} />
+          <Tab className="tab"  label="Profile" icon={<PersonIcon />} />
 
-{/* this menu is shown on when mobileMoreAnchorEl is true */}
-<Menu
-  id="lock menu" anchorEl = {mobileMoreAnchorEl} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-  transformOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted
-  open = {Boolean(mobileMoreAnchorEl)}  onClose={()=>this.setState({mobileMoreAnchorEl: null})}>
-  {/* display the profile menu item */}
-  <MenuItem onClick={()=>this.setState({profile:true})}> 
-    <IconButton >
-      <AccountCircle />
-    </IconButton>
-    <p>Profile</p>
-  </MenuItem>
-  {/* display the log out menu item */}
-  <MenuItem onClick = {()=>this.logout()}> 
-    <IconButton >
-      <ExitToAppIcon />
-    </IconButton>
-    <p>Log Out</p>
-  </MenuItem>
-</Menu>
-  </Toolbar>
-  <Dialog  onClose={()=>this.setState({profile:false })} aria-labelledby="customized-dialog-title" open={this.state.profile }>
+          </Tabs>
+          <Avatar src={this.state.profile} alt = {this.state.username} 
+          className={classes.big}  onClick={(e)=>this.setState({mobileMoreAnchorEl: e.currentTarget})}/>
 
-<DialogTitle style={{color: 'white', backgroundColor: '#333399'}} id="customized-dialog-title" onClose={()=>this.setState({dialog:false })}>
-      {this.props.username}
-</DialogTitle>
-<DialogContent>
-    <DialogContentText>
-    assets: {this.state.userProfil_aseet}
-    </DialogContentText>
-    <DialogContentText>
-    number of games played: {this.state.userProfil_games}
-    </DialogContentText>
-    <DialogContentText>
-    win / lose: {this.state.userProfil_win} / {this.state.userProfil_lost}
-    </DialogContentText>
-    <DialogContentText>
-    most assets in the history: {this.state.userProfil_highestCoin}
-    </DialogContentText>
-  </DialogContent>     
-</Dialog>
+          {/* this menu is shown on when mobileMoreAnchorEl is true */}
+          <Menu
+          id="lock menu" anchorEl = {mobileMoreAnchorEl} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }} keepMounted
+          open = {Boolean(mobileMoreAnchorEl)}  onClose={()=>this.setState({mobileMoreAnchorEl: null})}>
+          {/* display the profile menu item */}
+          <MenuItem onClick={()=>this.setState({profile:true})}> 
+            <IconButton >
+              <AccountCircle />
+            </IconButton>
+            <p>Profile</p>
+          </MenuItem>
+          {/* display the log out menu item */}
+          <MenuItem onClick = {()=>this.logout()}> 
+            <IconButton >
+              <ExitToAppIcon />
+            </IconButton>
+            <p>Log Out</p>
+          </MenuItem>
+          </Menu>
+        </Toolbar>
+        <Dialog  onClose={()=>this.setState({profile:false })} aria-labelledby="customized-dialog-title" open={this.state.profile }>
+          <DialogTitle style={{color: 'white', backgroundColor: '#333399'}} id="customized-dialog-title" onClose={()=>this.setState({dialog:false })}>
+            {this.props.username}
+          </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            assets: {this.state.userProfil_aseet}
+          </DialogContentText>
+          <DialogContentText>
+            number of games played: {this.state.userProfil_games}
+          </DialogContentText>
+          <DialogContentText>
+            win / lose: {this.state.userProfil_win} / {this.state.userProfil_lost}
+          </DialogContentText>
+          <DialogContentText>
+            most assets in the history: {this.state.userProfil_highestCoin}
+          </DialogContentText>
+        </DialogContent>     
+      </Dialog>
 
-</AppBar>
+    </AppBar>
     )
-
+      // information about the game displayed as grids
     const gridlist = (
       <GridList 
-            // cellHeight={180} 
-            spacing = {20} className={classes.gridList} backgroundColor = "black" cols={4} >
+        spacing = {20} className={classes.gridList} backgroundColor = "black" cols={4} >
         
           {tileData.map((tile) => (
             <GridListTile key={tile.img} >

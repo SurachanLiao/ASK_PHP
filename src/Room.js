@@ -33,7 +33,7 @@ const styles = theme => ({
       backgroundColor: "black",
     },
     menuButton: {
-      // marginRight: theme.spacing(2),
+      marginRight: theme.spacing(2),
     },
     title: {
       flexGrow: 1,
@@ -42,7 +42,6 @@ const styles = theme => ({
       width: 800,
       height: 450,
       // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
-      // transform: 'translateZ(0)',
     },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',
@@ -77,6 +76,8 @@ export class Room extends Component {
 
       }
     componentDidMount(){
+
+      // listen to the change in firebase database, if new user join, add new user to the state of users
         var currentComponent = this;
         var root = firebase.database();
         root.ref('/rooms').child(this.props.roomCode+'/users').on("value", function(snapshot){
@@ -84,8 +85,10 @@ export class Room extends Component {
             let newState = [];
             let cid = 0
             for (let user in users) {
+              // for each user, keep track of the user's id, name, profile, win and lost ratio, and how many
+              // games played in the past
             newState.push({
-                id: cid,
+                id: cid, // used to index user
                 name: user,
                 profile: users[user].profile, 
                 win: users[user].win,
@@ -146,7 +149,7 @@ export class Room extends Component {
 
       </div>
 
-        <div style={{color: "white", textAlign: "center"}}>
+    <div style={{color: "white", textAlign: "center"}}>
     Your room number is {this.props.roomCode}
     </div>
     <div style={{color: "white", textAlign: "center"}}>
@@ -162,7 +165,7 @@ export class Room extends Component {
     </div>
       
     <ul className = {classes.root}>
-
+      {/* display all the users in the room */}
       <GridList
       spacing = {20} className={classes.gridList} backgroundColor = "black" cols={4} >
    {this.state.users.map((user) => (
@@ -178,7 +181,7 @@ export class Room extends Component {
         }
       />
     </GridListTile>
-    
+    {/* this dialog is opened when user icon is clicked, and it display the user's information */}
     <Dialog  onClose={()=>this.setState({dialog:false })} aria-labelledby="customized-dialog-title" open={this.state.dialog && this.state.curUser === user.id}>
 
       <DialogTitle style={{color: 'white', backgroundColor: purple[500]}} id="customized-dialog-title" onClose={()=>this.setState({dialog:false })}>
